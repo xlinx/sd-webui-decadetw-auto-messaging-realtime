@@ -1,4 +1,4 @@
-import contextlib
+import pyautogui
 import logging
 
 import gradio as gr
@@ -10,13 +10,7 @@ import requests
 log = logging.getLogger("[auto-messaging-realtime]")
 
 
-# def screenshot():
-#     myScreenshot = pyautogui.screenshot()
-#     myScreenshot.save('./test.png')
-#     t = time.time()
-#     t1 = time.localtime(t)
-#     now = time.strftime('%Y/%m/%d %H:%M:%S', t1)
-#     send_msg_linenotify(now)
+
 
 
 class AutoMessaging(scripts.Script):
@@ -45,13 +39,19 @@ class AutoMessaging(scripts.Script):
         data = {
             'message': msg_all
         }
-        result = requests.post(url, headers=headers, data=data)
-        result = str(result.text)
-        log.warning(f"[][][send_msg_linenotify]result: {result}")
 
-        # image = open('./test.png', 'rb')
-        # imageFile = {'imageFile': image}
-        # return requests.post(url, headers=headers, data=data, files=imageFile)
+        if "ScreenShot" in bot_line_notify_send_with:
+            myscreenshot = pyautogui.screenshot()
+            myscreenshot.save('./myScreenshot.png')
+            image = open('./myScreenshot.png', 'rb')
+            imagefile = {'imageFile': image}
+            result = requests.post(url, headers=headers, data=data, files=imagefile)
+            log.warning(f"[][][send_msg_linenotify][with screenshot]result: {result}")
+        else:
+            result = requests.post(url, headers=headers, data=data)
+            log.warning(f"[][][send_msg_linenotify]result: {result}")
+
+        result = str(result.text)
         self.lin_notify_history_array.append([datetime.datetime.now().__str__(), result, msg_all])
         if len(self.lin_notify_history_array) > 3:
             self.lin_notify_history_array.remove(self.lin_notify_history_array[0])
@@ -83,7 +83,7 @@ class AutoMessaging(scripts.Script):
                                 "   ** YYY= send image \n"
                                 )
                     bot_line_notify_enabled = gr.Checkbox(label="0. Enable Auto Messaging", value=True)
-                    bot_line_notify_token = gr.Textbox(label="1.  [bot_line_notify_token]", lines=1,
+                    bot_line_notify_token = gr.Textbox(label="1. [bot_line_notify_token]", lines=1,
                                                        value="",
                                                        placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
                                                        )
@@ -102,7 +102,7 @@ class AutoMessaging(scripts.Script):
                                                                            step=1,
                                                                            info="60°C/140°F")
 
-                    bot_line_notify_send_with = gr.CheckboxGroup(["Image", "Text"], label="3. IF XXX Then [[[ YYY ]]]",
+                    bot_line_notify_send_with = gr.CheckboxGroup(["Image", "Text", "ScreenShot"], label="3. IF XXX Then [[[ YYY ]]]",
                                                                  info="then YYY(send text, image or both)?")
                     bot_line_notify_msg_header = gr.Textbox(label="4. [msg header]", lines=1,
                                                             value="[send from web-ui]",
