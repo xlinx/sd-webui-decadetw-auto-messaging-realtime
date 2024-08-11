@@ -47,8 +47,17 @@
 <tr >
     <td colspan="2"><img width="100%" src="images/r1.png"></td>
  </tr>
+<tr>
+    <td colspan="2"><b style="font-size:30px">4. Monitor w/GPU on Phone</b></td>
+ </tr>
 <tr >
     <td colspan="2"><img width="100%" src="images/r2.png"></td>
+ </tr>
+<tr>
+    <td colspan="2"><b style="font-size:30px">5. Auto mMessaging UI</b></td>
+ </tr>
+<tr >
+    <td colspan="2"><img width="100%" src="images/r3.png"></td>
  </tr>
 </table>
 

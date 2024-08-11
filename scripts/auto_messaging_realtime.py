@@ -296,9 +296,12 @@ class AutoMessaging(scripts.Script):
                                               im_telegram_token_botid, im_telegram_token_chatid,
                                               im_telegram_msg_header],
                                       outputs=[im_telegram_notify_history])
-        return [setting__im_line_notify_enabled, setting__im_line_notify_enabled, im_line_notify_token,
-                setting_time_count, im_line_notify_msg_header,
-                setting__im_telegram_enabled, im_telegram_token_botid, im_telegram_token_chatid]
+        return [setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                                              setting_trigger_type, setting_image_count, setting_time_count,
+                                              setting_temperature, setting_send_content_with,
+                                              im_line_notify_token, im_line_notify_msg_header,
+                                              im_telegram_token_botid, im_telegram_token_chatid,
+                                              im_telegram_msg_header]
 
     def after_component(self, component, **kwargs):
         if kwargs.get("elem_id") == "txt2img_prompt":
@@ -307,16 +310,19 @@ class AutoMessaging(scripts.Script):
             self.boxxIMG = component
 
     def process(self, p: StableDiffusionProcessingTxt2Img,
-                bot_line_notify_enabled, bot_line_notify_token, bot_line_notify_trigger_by,
-                bot_line_notify_trigger_by_time_count,
-                bot_line_notify_send_with, bot_line_notify_msg_header,
-                bot_telegram_enabled, bot_telegram_token_botid, bot_telegram_token_chatid):
+                setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                setting_trigger_type, setting_image_count, setting_time_count,
+                setting_temperature, setting_send_content_with,
+                im_line_notify_token, im_line_notify_msg_header,
+                im_telegram_token_botid, im_telegram_token_chatid,
+                im_telegram_msg_header):
 
-        if bot_line_notify_enabled:
-            log.warning(f"[][][bot_line_notify_enabled]: {bot_line_notify_token}")
-            self.send_msg_linenotify(bot_line_notify_token, bot_line_notify_trigger_by,
-                                     bot_line_notify_trigger_by_time_count,
-                                     bot_line_notify_send_with, bot_line_notify_msg_header)
-
-        if bot_telegram_enabled:
-            log.warning(f"[][][call_llm_translate]: {bot_telegram_enabled}")
+        if setting__im_line_notify_enabled:
+            log.warning(f"[][process][bot_line_notify_enabled]: {setting__im_line_notify_enabled}")
+        #     log.warning(f"[][][bot_line_notify_enabled]: {bot_line_notify_token}")
+        #     self.send_msg_linenotify(bot_line_notify_token, bot_line_notify_trigger_by,
+        #                              bot_line_notify_trigger_by_time_count,
+        #                              bot_line_notify_send_with, bot_line_notify_msg_header)
+        #
+        if setting__im_telegram_enabled:
+            log.warning(f"[][process][bot_telegram_enabled]: {setting__im_telegram_enabled}")
