@@ -1,4 +1,6 @@
+import enum
 import os
+
 from threading import Timer
 import json
 import pyautogui
@@ -21,6 +23,41 @@ class RepeatingTimer(Timer):
             self.finished.wait(self.interval)
 
 
+class EnumSendContent(enum.Enum):
+    SDIMAGE = 'SD-Image-generated'
+    ScreenShot = 'ScreenShot'
+    TextPrompt = 'Text-Prompt'
+    Text_neg_prompt = 'Text-neg_prompt'
+    Text_Temperature = 'Text-Temperature'
+
+    @classmethod
+    def values(cls):
+        return [e.value for e in cls]
+
+
+class EnumTriggetType(enum.Enum):
+    SDIMAGE = 'SD-Image-generated'
+    TIMER = 'Timer Countdown'
+    STATE_TEMPERATURE_GPU = 'STATE-Temperature-GPU'
+    STATE_TEMPERATURE_CPU = 'STATE-Temperature-CPU'
+
+    @classmethod
+    def to_dict(cls):
+        return {e.name: e.value for e in cls}
+
+    @classmethod
+    def items(cls):
+        return [(e.name, e.value) for e in cls]
+
+    @classmethod
+    def keys(cls):
+        return [e.name for e in cls]
+
+    @classmethod
+    def values(cls):
+        return [e.value for e in cls]
+
+
 class AutoMessaging(scripts.Script):
     def __init__(self) -> None:
         super().__init__()
@@ -37,14 +74,30 @@ class AutoMessaging(scripts.Script):
 
     # bot_line_notify_trigger_by_temperature_label = "60°C/140°F"
 
-    def send_msg_all(self, setting__im_line_notify_enabled, setting__im_telegram_enabled,
-                     setting_trigger_type, setting_image_count, setting_time_count, setting_temperature,
-                     setting_send_content_with,
-                     im_line_notify_token, im_line_notify_msg_header,
-                     im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
+    def send_msg_all_from_processing(self, p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                                     setting_trigger_type, setting_image_count, setting_time_count,
+                                     setting_temperature,
+                                     setting_send_content_with,
+                                     im_line_notify_token, im_line_notify_msg_header,
+                                     im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
+
+        im_line_notify_msg_header += ''.join(str(x) for x in p.all_prompts)
+        im_telegram_msg_header += ''.join(str(x) for x in p.all_prompts)
+
+        self.send_msg_all_lets_go(setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                                  setting_trigger_type, setting_image_count, setting_time_count, setting_temperature,
+                                  setting_send_content_with,
+                                  im_line_notify_token, im_line_notify_msg_header,
+                                  im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header)
+
+    def send_msg_all_lets_go(self, setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                             setting_trigger_type, setting_image_count, setting_time_count, setting_temperature,
+                             setting_send_content_with,
+                             im_line_notify_token, im_line_notify_msg_header,
+                             im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
         opened_files = []
 
-        if "ScreenShot" in setting_send_content_with:
+        if EnumSendContent.ScreenShot.value in setting_send_content_with:
             myscreenshot = pyautogui.screenshot()
             base_folder = os.path.dirname(__file__)
             image_path = os.path.join(base_folder, "..", "myScreenshot.png")
@@ -64,8 +117,8 @@ class AutoMessaging(scripts.Script):
                                                          im_telegram_token_chatid,
                                                          im_telegram_msg_header)
             log.warning(f"[][send_msg_all][result_telegram_bot]: {result_telegram_bot}")
-        if "Timer" in setting_trigger_type:
-            self.timer_couunt_threading = Timer(setting_time_count, self.send_msg_all,
+        if EnumTriggetType.TIMER.value in setting_trigger_type:
+            self.timer_couunt_threading = Timer(setting_time_count, self.send_msg_all_lets_go,
                                                 [setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                                  setting_trigger_type, setting_image_count, setting_time_count,
                                                  setting_temperature, setting_send_content_with,
@@ -113,11 +166,12 @@ class AutoMessaging(scripts.Script):
 
     def send_msg_telegram(self, opened_files, im_telegram_token_botid, im_telegram_token_chatid,
                           im_telegram_msg_header):
-        log.warning(f"[][][send_msg_telegram]: {opened_files,im_telegram_token_botid, im_telegram_token_chatid,im_telegram_msg_header}")
+        log.warning(
+            f"[][][send_msg_telegram]: {opened_files, im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header}")
 
         assert type(im_telegram_msg_header) == str, "must be str"
         # msg_all = bot_telegram_msg_header + str(bot_line_notify_trigger_by) + str(bot_line_notify_send_with)
-        headers = {'Content-Type': 'application/json',"cache-control": "no-cache"}
+        headers = {'Content-Type': 'application/json', "cache-control": "no-cache"}
 
         # API ref: https://core.telegram.org/bots/api#sendphoto
         if opened_files.__len__() > 0:
@@ -175,24 +229,31 @@ class AutoMessaging(scripts.Script):
                     setting__im_line_notify_enabled = gr.Checkbox(label="0. Enable LINE-Notify", value=True)
                     setting__im_telegram_enabled = gr.Checkbox(label="0. Enable Telegram-bot", value=True)
 
-                    setting_trigger_type = gr.CheckboxGroup(["sd-Image", "Timer", "State"],
-                                                            label="1. IF [[[ XXX ]]] Then YYY",
-                                                            info="When should send? trigger events by XXX?")
+                    setting_trigger_type = gr.CheckboxGroup(
+                        EnumTriggetType.values(),
+                        label="1. IF [[[ XXX ]]] Then YYY",
+                        info="When should send? trigger events by XXX?")
                     with gr.Row():
-                        setting_image_count = gr.Slider(1, 100, value=1, label="2.1 Image Count",
+                        setting_image_count = gr.Slider(1, 100, value=1,
+                                                        label="2.1 " + EnumTriggetType.SDIMAGE.value + " count",
                                                         step=1,
-                                                        info="send by every sd-image")
+                                                        info="[" + EnumTriggetType.SDIMAGE.value + "] send msg by generate count")
                         setting_time_count = gr.Slider(0, 6000, value=60,
-                                                       label="2.2  Timer Countdown",
+                                                       label="2.2  " + EnumTriggetType.TIMER.value,
                                                        step=1,
-                                                       info="send by seconds. ")
-                        setting_temperature = gr.Slider(0, 100, value=60,
-                                                        label="2.3 Temperature Count",
-                                                        step=1,
-                                                        info="60°C/140°F")
+                                                       info="[" + EnumTriggetType.TIMER.value + "]send by seconds. ")
+                    with gr.Row():
+                        setting_temperature_gpu = gr.Slider(0, 100, value=60,
+                                                            label="2.3 " + EnumTriggetType.STATE_TEMPERATURE_GPU.value + " limit °C",
+                                                            step=1,
+                                                            info="[" + EnumTriggetType.STATE_TEMPERATURE_GPU.value + "] 60°C/140°F")
+                        setting_temperature_cpu = gr.Slider(0, 100, value=60,
+                                                            label="2.4 " + EnumTriggetType.STATE_TEMPERATURE_CPU.value + " limit °C",
+                                                            step=1,
+                                                            info="[" + EnumTriggetType.STATE_TEMPERATURE_CPU.value + "] 60°C/140°F")
 
                     setting_send_content_with = gr.CheckboxGroup(
-                        ["sd-Image", "ScreenShot", "Text-prompt", "Text-neg-prompt", "Text-Temperature"],
+                        EnumSendContent.values(),
                         label="3. IF XXX Then [[[ YYY ]]]",
                         info="Send what? then YYY(send text, image or both)?")
                     setting_history = gr.Dataframe(
@@ -270,38 +331,38 @@ class AutoMessaging(scripts.Script):
         im_telegram_getupdates.click(self.tel_getupdate,
                                      inputs=[im_telegram_token_botid],
                                      outputs=[im_telegram_getupdates_result])
-        setting_temperature.change(fn=self.update_temperature_label,
-                                   inputs=setting_temperature
-                                   )
-        setting_send_button.click(self.send_msg_all,
+        setting_temperature_gpu.change(fn=self.update_temperature_label,
+                                       inputs=setting_temperature_gpu
+                                       )
+        setting_send_button.click(self.send_msg_all_lets_go,
                                   inputs=[setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                           setting_trigger_type, setting_image_count, setting_time_count,
-                                          setting_temperature, setting_send_content_with,
+                                          setting_temperature_gpu, setting_send_content_with,
                                           im_line_notify_token, im_line_notify_msg_header,
                                           im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header],
                                   outputs=[setting_history])
-        im_line_notify_send_button.click(self.send_msg_all,
+        im_line_notify_send_button.click(self.send_msg_all_lets_go,
                                          inputs=[setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                                  setting_trigger_type, setting_image_count, setting_time_count,
-                                                 setting_temperature, setting_send_content_with,
+                                                 setting_temperature_gpu, setting_send_content_with,
                                                  im_line_notify_token, im_line_notify_msg_header,
                                                  im_telegram_token_botid, im_telegram_token_chatid,
                                                  im_telegram_msg_header],
                                          outputs=[im_line_notify_history])
-        im_telegram_send_button.click(self.send_msg_all,
+        im_telegram_send_button.click(self.send_msg_all_lets_go,
                                       inputs=[setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                               setting_trigger_type, setting_image_count, setting_time_count,
-                                              setting_temperature, setting_send_content_with,
+                                              setting_temperature_gpu, setting_send_content_with,
                                               im_line_notify_token, im_line_notify_msg_header,
                                               im_telegram_token_botid, im_telegram_token_chatid,
                                               im_telegram_msg_header],
                                       outputs=[im_telegram_notify_history])
         return [setting__im_line_notify_enabled, setting__im_telegram_enabled,
-                                              setting_trigger_type, setting_image_count, setting_time_count,
-                                              setting_temperature, setting_send_content_with,
-                                              im_line_notify_token, im_line_notify_msg_header,
-                                              im_telegram_token_botid, im_telegram_token_chatid,
-                                              im_telegram_msg_header]
+                setting_trigger_type, setting_image_count, setting_time_count,
+                setting_temperature_gpu, setting_send_content_with,
+                im_line_notify_token, im_line_notify_msg_header,
+                im_telegram_token_botid, im_telegram_token_chatid,
+                im_telegram_msg_header]
 
     def after_component(self, component, **kwargs):
         if kwargs.get("elem_id") == "txt2img_prompt":
@@ -316,13 +377,24 @@ class AutoMessaging(scripts.Script):
                 im_line_notify_token, im_line_notify_msg_header,
                 im_telegram_token_botid, im_telegram_token_chatid,
                 im_telegram_msg_header):
+        log.warning(f"[1][process][setting_trigger_type]: {setting_trigger_type}")
 
-        if setting__im_line_notify_enabled:
-            log.warning(f"[][process][bot_line_notify_enabled]: {setting__im_line_notify_enabled}")
+        if setting__im_line_notify_enabled or setting__im_telegram_enabled:
+            self.send_msg_all_from_processing(p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                                              setting_trigger_type, setting_image_count, setting_time_count,
+                                              setting_temperature,
+                                              setting_send_content_with,
+                                              im_line_notify_token, im_line_notify_msg_header,
+                                              im_telegram_token_botid, im_telegram_token_chatid,
+                                              im_telegram_msg_header)
+
+        # if setting__im_line_notify_enabled:
+        #     if EnumTriggetType.SDIMAGE.value in setting_trigger_type:
+        #         log.warning(f"[2][process][bot_line_notify_enabled]: {setting__im_line_notify_enabled}")
         #     log.warning(f"[][][bot_line_notify_enabled]: {bot_line_notify_token}")
         #     self.send_msg_linenotify(bot_line_notify_token, bot_line_notify_trigger_by,
         #                              bot_line_notify_trigger_by_time_count,
         #                              bot_line_notify_send_with, bot_line_notify_msg_header)
         #
-        if setting__im_telegram_enabled:
-            log.warning(f"[][process][bot_telegram_enabled]: {setting__im_telegram_enabled}")
+        # if setting__im_telegram_enabled:
+        #     log.warning(f"[3][process][bot_telegram_enabled]: {setting__im_telegram_enabled}")

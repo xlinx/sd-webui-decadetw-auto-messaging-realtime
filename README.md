@@ -42,22 +42,24 @@
     <td><img width="200px" src="https://core.telegram.org/file/811140934/1/tbDSLHSaijc/fdcc7b6d5fb3354adf"></td>
  </tr>
 <tr>
-    <td colspan="2"><b style="font-size:30px">3. Monitor SD-web-ui on Phone</b></td>
+    <td colspan="2"><b style="font-size:30px">3. Monitor SD-web-ui on Phone (prompt, result, temperature)</b></td>
  </tr>
 <tr >
-    <td colspan="2"><img width="100%" src="images/r1.png"></td>
+    <td colspan="1"><img width="100%" src="images/r5.png"></td>
+    <td colspan="1"><img width="100%" src="images/r1.png"></td>
  </tr>
 <tr>
-    <td colspan="2"><b style="font-size:30px">4. Monitor w/GPU on Phone</b></td>
+    <td colspan="2"><b style="font-size:30px">4. Monitor whole ScreenShot on Phone</b></td>
  </tr>
 <tr >
     <td colspan="2"><img width="100%" src="images/r2.png"></td>
  </tr>
 <tr>
-    <td colspan="2"><b style="font-size:30px">5. Auto mMessaging UI</b></td>
+    <td colspan="2"><b style="font-size:30px">5. Auto Messaging Realtime UI</b></td>
  </tr>
 <tr >
     <td colspan="2"><img width="100%" src="images/r3.png"></td>
+    
  </tr>
 </table>
 
