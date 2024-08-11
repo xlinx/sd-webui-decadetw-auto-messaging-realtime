@@ -1,18 +1,20 @@
+import datetime
 import enum
-import os
-
-from threading import Timer
-import json
-import pyautogui
 import logging
+import os
+from threading import Timer
 
 import gradio as gr
-from modules import scripts
-from modules.processing import StableDiffusionProcessingTxt2Img
-import datetime
+import pyautogui
 import requests
 
-log = logging.getLogger("[auto-messaging-realtime]")
+from modules import scripts
+from modules.processing import StableDiffusionProcessingTxt2Img
+# from gpiozero import CPUTemperature
+
+# cpu = CPUTemperature()
+# print(cpu.temperature)
+# log = logging.getLogger("[auto-messaging-realtime]")
 
 
 class RepeatingTimer(Timer):

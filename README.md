@@ -2,13 +2,13 @@
 * Automatic1111 extension
 * Messaging by time | result | states
   * every 10|60|120 sec
-  * each result image generated
-  * temperature state too high
+  * each result image generated (finding how get image path ing...)
+  * temperature state too high (considering use py-lib or not )
 * Messaging to you or group
   * image result, 
   * prompt, 
   * web-ui setting, 
-  * PC state (like: CPU, GPU temperature)
+  * PC state (like: CPU, GPU temperature) (studying... )
     * https://github.com/w-e-w/stable-diffusion-webui-GPU-temperature-protection
 
 
@@ -59,7 +59,12 @@
  </tr>
 <tr >
     <td colspan="2"><img width="100%" src="images/r3.png"></td>
-    
+ </tr>
+<tr >
+    <td colspan="2"><img width="100%" src="images/r33.png"></td>
+ </tr>
+<tr >
+    <td colspan="2"><img width="100%" src="images/r333.png"></td>
  </tr>
 </table>
 
