@@ -1,6 +1,6 @@
 import os
 from threading import Timer
-
+import json
 import pyautogui
 import logging
 
@@ -95,6 +95,7 @@ class AutoMessaging(scripts.Script):
 
         if opened_files.__len__() > 0:
             for img in opened_files:
+                img.seek(0)
                 imagefile = {'imageFile': img}
                 result = requests.post(url, headers=headers, data=data, files=imagefile)
                 log.warning(f"[][][send_msg_linenotify]w/image: {result}")
@@ -112,23 +113,31 @@ class AutoMessaging(scripts.Script):
 
     def send_msg_telegram(self, opened_files, im_telegram_token_botid, im_telegram_token_chatid,
                           im_telegram_msg_header):
+        log.warning(f"[][][send_msg_telegram]: {opened_files,im_telegram_token_botid, im_telegram_token_chatid,im_telegram_msg_header}")
+
         assert type(im_telegram_msg_header) == str, "must be str"
         # msg_all = bot_telegram_msg_header + str(bot_line_notify_trigger_by) + str(bot_line_notify_send_with)
-        headers = {'Content-Type': 'application/json'}
+        headers = {'Content-Type': 'application/json',"cache-control": "no-cache"}
 
         # API ref: https://core.telegram.org/bots/api#sendphoto
         if opened_files.__len__() > 0:
             url = f'https://api.telegram.org/bot{im_telegram_token_botid}/sendPhoto'
             data = {"chat_id": im_telegram_token_chatid, "caption": im_telegram_msg_header}
             for img in opened_files:
+                img.seek(0)
                 imagefile = {'photo': img}
-                result = requests.post(url, headers=headers, data=data, files=imagefile, verify=False)
+                # result = requests.post(url, headers=headers, data=json.dumps(data), files=imagefile)
+                result = requests.post(url, params=data, files=imagefile)
                 log.warning(f"[][][send_msg_telegram]w/image: {result}")
 
         else:
+            # url = f'https://api.telegram.org/bot{im_telegram_token_botid}/sendMessage?chat_id={im_telegram_token_chatid}&text={im_telegram_msg_header}'
+            # result = requests.get(url)
             url = f'https://api.telegram.org/bot{im_telegram_token_botid}/sendMessage'
             data = {"chat_id": im_telegram_token_chatid, "text": im_telegram_msg_header}
-            result = requests.post(url, headers=headers, data=data, verify=False)
+            log.warning(f"[][][send_msg_telegram]data: {data}")
+            # result = requests.post(url, headers=headers, data=data, json=json.dumps(data))
+            result = requests.post(url, params=data)
             log.warning(f"[][][send_msg_telegram]w/text: {result}")
 
         result = str(result.text)
