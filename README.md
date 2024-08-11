@@ -40,24 +40,33 @@
   * LINE bot messaging-api (in advance, u can send message control web-ui)
     * https://developers.line.biz/zh-hant/services/messaging-api/
   * Telegram 
-    * You need get BotToken & ChatId
-      * https://core.telegram.org/bots#6-botfather
-      * https://t.me/botfather
-    * get BotToken
-      * add botfather inside ur telgram
-      * type "/newbot"
-      * type "XXXXXXXX_bot"
-      * then, u will get botToken
-      * then add this bot as ur friend
-    * get ChatId
-      * replace YOUR_BOT_TOKEN
-        * https://api.telegram.org/botYOUR_BOT_TOKEN/getUpdates
-  * WhatsApp
-    * seems only for business
-    * https://business.whatsapp.com/products/business-platform
-  * IFTTT (share what's funny how u interactive with web-ui)
-    * https://ifttt.com/line
-    * https://ifttt.com/explore
+    * You need get [**_`BotToken`_**] & [**_`ChatId`_**]
+      1. https://t.me/botfather
+      2. type /newbot 
+      3. bot name: webuix
+      4. bot username("end with _bot"): webuix_bot
+      5. okay, u got [**_`BotToken`_**]
+      6. add ur new bot as friend: goto https://t.me/webuix_bot
+      7. get [**_`ChatID`_**]: https://api.telegram.org/botXXXXXXXXXXXXXXX/getUpdates
+      8. find [**_`ChatID`_**] in json file=> ex: 1967680189
+  
+   * detail manual: https://core.telegram.org/bots/tutorial#getting-ready
+      
+   * get BotToken
+     * add botfather inside ur telgram
+     * type "/newbot"
+     * type "XXXXXXXX_bot"
+     * then, u will get botToken
+     * then add this bot as ur friend
+   * get ChatId
+     * replace YOUR_BOT_TOKEN
+       * https://api.telegram.org/botYOUR_BOT_TOKEN/getUpdates
+   * WhatsApp
+     * seems only for business
+     * https://business.whatsapp.com/products/business-platform
+   * IFTTT (share what's funny how u interactive with web-ui)
+     * https://ifttt.com/line
+     * https://ifttt.com/explore
 
   
 
