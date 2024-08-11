@@ -14,15 +14,37 @@
 
 ## Motivation
 
-* When u outdoor
+* When u outdoor, receive SD-web-ui State.
+  * [Receive] Image
+    * SD-image-generated
+    * PC screenshot
+      * u can put the windows-build system monitor beside for screenshot capture
+  * [Receive] Text
+    * SD-Prompt
+    * PC-State-temperature (working...)
+      * Nvidia card temperature
+      * AMD card temperature
+      * CPU temperature
+  * [Receive] SD-Running-PC-Screenshot
+  
 * Just look IM app to check result from web-ui
 * [Rx] Monitor ur Web-ui when u eating, GYM, working
   * image, info-text, info-temperature
 * [Tx] Control ur Web-ui when u eating, GYM, working (not yet)
   * type message as command to stop gen-forever
+<table style="border-width:0px" >
+ <tr>
+    <td><b style="font-size:30px">1. LINE-Notify</b></td>
+    <td><b style="font-size:30px">2. TelegramBot</b></td>
+ </tr>
+<tr>
+    <td><img width="400px" src="https://scdn.line-apps.com/n/line_notice/img/pc/img_lp02_zh_TW.png?20161005"></td>
+    <td><img width="200px" src="https://core.telegram.org/file/811140934/1/tbDSLHSaijc/fdcc7b6d5fb3354adf"></td>
+ </tr>
 
-<img width="30%" src="https://scdn.line-apps.com/n/line_notice/img/pc/img_lp02_zh_TW.png?20161005">
-<img width="10%" src="https://core.telegram.org/file/811140934/1/tbDSLHSaijc/fdcc7b6d5fb3354adf">
+
+</table>
+
 
 ---
 
