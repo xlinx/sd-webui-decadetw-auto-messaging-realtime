@@ -43,11 +43,12 @@
  </tr>
 <tr>
     <td colspan="2"><b style="font-size:30px">3. Monitor SD-web-ui on Phone (prompt, result, temperature)</b></td>
- </tr>
+</tr>
 <tr >
-    <td colspan="1"><img width="100%" src="images/r5.png"></td>
-    <td colspan="1"><img width="100%" src="images/r1.png"></td>
+    <td colspan="1"><img width="100%" src="images/r7.jpg"></td>
+    <td colspan="1"><img width="65%" src="images/r77.jpg"></td>
  </tr>
+
 <tr>
     <td colspan="2"><b style="font-size:30px">4. Monitor whole ScreenShot on Phone</b></td>
  </tr>
