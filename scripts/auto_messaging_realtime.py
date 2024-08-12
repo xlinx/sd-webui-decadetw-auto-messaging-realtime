@@ -8,13 +8,15 @@ import gradio as gr
 import pyautogui
 import requests
 
-from modules import scripts
+from modules import scripts, script_callbacks
 from modules.processing import StableDiffusionProcessingTxt2Img
+
 # from gpiozero import CPUTemperature
 
 # cpu = CPUTemperature()
 # print(cpu.temperature)
 # log = logging.getLogger("[auto-messaging-realtime]")
+log = logging.getLogger("[auto-messaging-realtime]")
 
 
 class RepeatingTimer(Timer):
@@ -60,6 +62,9 @@ class EnumTriggetType(enum.Enum):
         return [e.value for e in cls]
 
 
+
+
+
 class AutoMessaging(scripts.Script):
     def __init__(self) -> None:
         super().__init__()
@@ -73,8 +78,11 @@ class AutoMessaging(scripts.Script):
     lin_notify_history_array = []
     telegram_bot_history_array = []
     timer_couunt_threading = None
-
+    on_image_saved_params = None
     # bot_line_notify_trigger_by_temperature_label = "60°C/140°F"
+    # def on_image_saved_x(self, params):  # image, p, filename, pnginfo
+    #     log.warning(f"[][script_callbacks][on_image_saved_x] name:{params.filename} {params.pnginfo}")
+    #     self.on_image_saved_params = params
 
     def send_msg_all_from_processing(self, p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                      setting_trigger_type, setting_image_count, setting_time_count,
@@ -83,8 +91,13 @@ class AutoMessaging(scripts.Script):
                                      im_line_notify_token, im_line_notify_msg_header,
                                      im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
 
-        im_line_notify_msg_header += ''.join(str(x) for x in p.all_prompts)
-        im_telegram_msg_header += ''.join(str(x) for x in p.all_prompts)
+        if EnumSendContent.TextPrompt.value in setting_send_content_with:
+            im_line_notify_msg_header += p.prompt
+            im_telegram_msg_header += p.prompt
+
+        if EnumSendContent.Text_neg_prompt.value in setting_send_content_with:
+            im_line_notify_msg_header += p.prompt
+            im_telegram_msg_header += p.prompt
 
         self.send_msg_all_lets_go(setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                   setting_trigger_type, setting_image_count, setting_time_count, setting_temperature,
@@ -98,10 +111,19 @@ class AutoMessaging(scripts.Script):
                              im_line_notify_token, im_line_notify_msg_header,
                              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
         opened_files = []
+        base_folder = os.path.dirname(__file__)
+
+        if self.on_image_saved_params is not None:
+            im_line_notify_msg_header += str(self.on_image_saved_params.pnginfo)
+            im_telegram_msg_header += str(self.on_image_saved_params.pnginfo)
+            image_path = os.path.join(base_folder, "..", "..", "..",  self.on_image_saved_params.filename)
+            log.warning(f"[][send_msg_all_lets_go][self.on_image_saved_params is not None] image_path:{image_path}")
+            image = open(image_path, 'rb')
+            opened_files.append(image)
+            self.on_image_saved_params = None
 
         if EnumSendContent.ScreenShot.value in setting_send_content_with:
             myscreenshot = pyautogui.screenshot()
-            base_folder = os.path.dirname(__file__)
             image_path = os.path.join(base_folder, "..", "myScreenshot.png")
             myscreenshot.save(image_path)
             image = open(image_path, 'rb')
@@ -379,7 +401,7 @@ class AutoMessaging(scripts.Script):
                 im_line_notify_token, im_line_notify_msg_header,
                 im_telegram_token_botid, im_telegram_token_chatid,
                 im_telegram_msg_header):
-        log.warning(f"[1][process][setting_trigger_type]: {setting_trigger_type}")
+        log.warning(f"[1][process][setting_trigger_type]: {setting_trigger_type} ")
 
         if setting__im_line_notify_enabled or setting__im_telegram_enabled:
             self.send_msg_all_from_processing(p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
@@ -390,13 +412,29 @@ class AutoMessaging(scripts.Script):
                                               im_telegram_token_botid, im_telegram_token_chatid,
                                               im_telegram_msg_header)
 
-        # if setting__im_line_notify_enabled:
-        #     if EnumTriggetType.SDIMAGE.value in setting_trigger_type:
-        #         log.warning(f"[2][process][bot_line_notify_enabled]: {setting__im_line_notify_enabled}")
-        #     log.warning(f"[][][bot_line_notify_enabled]: {bot_line_notify_token}")
-        #     self.send_msg_linenotify(bot_line_notify_token, bot_line_notify_trigger_by,
-        #                              bot_line_notify_trigger_by_time_count,
-        #                              bot_line_notify_send_with, bot_line_notify_msg_header)
-        #
-        # if setting__im_telegram_enabled:
-        #     log.warning(f"[3][process][bot_telegram_enabled]: {setting__im_telegram_enabled}")
+
+# def on_after_component(component, **_kwargs):
+#     global txt2img_submit_button, img2img_submit_button
+#     if getattr(component, "elem_id", None) == "txt2img_generate":
+#         txt2img_submit_button = component
+#         return
+#     if getattr(component, "elem_id", None) == "img2img_generate":
+#         img2img_submit_button = component
+
+#name:output\txt2img-images\fantasticmix_k2\10595-3748719078.png
+# {
+# 'parameters': '1girl,A superstar on stage.,, <lora:LCM_15:1>, <lora:ip-adapter-faceid-plusv2_sd15_lora:1>\nNegative
+# prompt: MajicNegative_V2,badhandv4,\nSteps: 6, Sampler: LCM, Schedule type: Automatic, CFG scale: 1.5, Seed: 3748719078,
+# Size: 768x1024, Model hash: 19bbe9faa4, Model: fantasticmix_k2, VAE hash: 07af11b95c, VAE: vae-ft-mse-840000-ema-pruned.safetensors,
+# Clip skip: 2, Lora hashes: "LCM_15: aaebf6360f7d, ip-adapter-faceid-plusv2_sd15_lora: a95a0f4bdcb9",
+# TI hashes: "MajicNegative_V2: a53884ef726b, badhandv4: 5e40d722fc3d", Downcast alphas_cumprod: True, Version: v1.9.4'}
+
+def on_image_saved(params):  #image, p, filename, pnginfo
+    AutoMessaging.on_image_saved_params = params
+
+
+# script_callbacks.on_ui_settings(on_ui_settings)
+# script_callbacks.on_after_component(on_after_component)
+# script_callbacks.on_app_started(add_api_endpoints)
+# script_callbacks.on_before_ui(on_before_ui)
+script_callbacks.on_image_saved(on_image_saved)
