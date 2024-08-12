@@ -318,11 +318,11 @@ class AutoMessaging(scripts.Script):
                     )
                     with gr.Row():
                         setting_timer_start = gr.Button(
-                            "Start Timer")
+                            "[Individual] Start Timer-Countdown")
                         setting_timer_cancel = gr.Button(
-                            "Cancel Timer")
+                            "[Individual] Cancel Timer-Countdown")
                     setting_send_button = gr.Button(
-                        "Test Send All (trigger ALL IMs enabled)")
+                        "Test Send Message (enabled.)")
 
                 with gr.Tab("LINE-Notify"):
                     gr.Markdown("* LINE-Notify only need [Token]\n"
@@ -444,10 +444,7 @@ class AutoMessaging(scripts.Script):
                 im_telegram_msg_header):
         #https://builtin.com/software-engineering-perspectives/convert-list-to-dictionary-python
         if setting__im_line_notify_enabled or setting__im_telegram_enabled:
-            if setting_trigger_type.__len__() == 0 or setting_send_content_with.__len__() == 0:
-                log.warning(
-                    f"[1][process][setting_trigger_type]No trigger type selected: {setting_trigger_type} setting_send_content_with: {setting_send_content_with} ")
-            else:
+            if EnumTriggetType.SDIMAGE.value in setting_trigger_type:
                 log.warning(f"[1][process][setting_trigger_type]: {setting_trigger_type} ")
                 self.send_msg_all_from_processing(p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                                   setting_trigger_type, setting_image_count, setting_time_count,
