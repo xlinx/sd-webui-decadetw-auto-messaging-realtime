@@ -66,6 +66,7 @@ class EnumTriggetType(enum.Enum):
 
 
 class AutoMessaging(scripts.Script):
+
     def __init__(self) -> None:
         super().__init__()
 
@@ -78,7 +79,7 @@ class AutoMessaging(scripts.Script):
     lin_notify_history_array = []
     telegram_bot_history_array = []
     timer_couunt_threading = None
-    on_image_saved_params = None
+
     # bot_line_notify_trigger_by_temperature_label = "60°C/140°F"
     # def on_image_saved_x(self, params):  # image, p, filename, pnginfo
     #     log.warning(f"[][script_callbacks][on_image_saved_x] name:{params.filename} {params.pnginfo}")
@@ -112,15 +113,15 @@ class AutoMessaging(scripts.Script):
                              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
         opened_files = []
         base_folder = os.path.dirname(__file__)
-
-        if self.on_image_saved_params is not None:
-            im_line_notify_msg_header += str(self.on_image_saved_params.pnginfo)
-            im_telegram_msg_header += str(self.on_image_saved_params.pnginfo)
-            image_path = os.path.join(base_folder, "..", "..", "..",  self.on_image_saved_params.filename)
+        global on_image_saved_params
+        if on_image_saved_params is not None:
+            im_line_notify_msg_header += str(on_image_saved_params.pnginfo)
+            im_telegram_msg_header += str(on_image_saved_params.pnginfo)
+            image_path = os.path.join(base_folder, "..", "..", "..",  on_image_saved_params.filename)
             log.warning(f"[][send_msg_all_lets_go][self.on_image_saved_params is not None] image_path:{image_path}")
             image = open(image_path, 'rb')
             opened_files.append(image)
-            self.on_image_saved_params = None
+            on_image_saved_params = None
 
         if EnumSendContent.ScreenShot.value in setting_send_content_with:
             myscreenshot = pyautogui.screenshot()
@@ -429,8 +430,10 @@ class AutoMessaging(scripts.Script):
 # Clip skip: 2, Lora hashes: "LCM_15: aaebf6360f7d, ip-adapter-faceid-plusv2_sd15_lora: a95a0f4bdcb9",
 # TI hashes: "MajicNegative_V2: a53884ef726b, badhandv4: 5e40d722fc3d", Downcast alphas_cumprod: True, Version: v1.9.4'}
 
+on_image_saved_params = None
 def on_image_saved(params):  #image, p, filename, pnginfo
-    AutoMessaging.on_image_saved_params = params
+    global on_image_saved_params
+    on_image_saved_params = params
 
 
 # script_callbacks.on_ui_settings(on_ui_settings)
