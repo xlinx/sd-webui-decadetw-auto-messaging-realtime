@@ -241,7 +241,7 @@ class AutoMessaging(scripts.Script):
     def ui(self, is_img2img):
         with gr.Blocks():
             # gr.Markdown("Blocks")
-            with gr.Accordion(open=True, label="Auto Messaging Realtime v20240808"):
+            with gr.Accordion(open=False, label="Auto Messaging Realtime v20240808"):
                 with gr.Tab("MSG Info"):
                     gr.Markdown(
                         "* IF [XXX] then [YYY] \n"
@@ -251,12 +251,13 @@ class AutoMessaging(scripts.Script):
                         "* 4 YYY= send text \n"
                         "* 5 YYY= send image \n"
                     )
-                    setting__im_line_notify_enabled = gr.Checkbox(label="0. Enable LINE-Notify", value=True)
-                    setting__im_telegram_enabled = gr.Checkbox(label="0. Enable Telegram-bot", value=True)
+                    setting__im_line_notify_enabled = gr.Checkbox(label="0. Enable LINE-Notify", value=False)
+                    setting__im_telegram_enabled = gr.Checkbox(label="0.Enable Telegram-bot", value=False)
 
                     setting_trigger_type = gr.CheckboxGroup(
                         EnumTriggetType.values(),
-                        label="1. IF [[[ XXX ]]] Then YYY",
+                        value=EnumTriggetType.values(),
+                        label="1.  IF [[[ XXX ]]] Then YYY",
                         info="When should send? trigger events by XXX?")
                     with gr.Row():
                         setting_image_count = gr.Slider(1, 100, value=1,
@@ -279,6 +280,7 @@ class AutoMessaging(scripts.Script):
 
                     setting_send_content_with = gr.CheckboxGroup(
                         EnumSendContent.values(),
+                        value=EnumSendContent.values(),
                         label="3. IF XXX Then [[[ YYY ]]]",
                         info="Send what? then YYY(send text, image or both)?")
                     setting_history = gr.Dataframe(
