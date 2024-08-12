@@ -111,6 +111,7 @@ class AutoMessaging(scripts.Script):
                              setting_send_content_with,
                              im_line_notify_token, im_line_notify_msg_header,
                              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
+
         opened_files = []
         base_folder = os.path.dirname(__file__)
         global on_image_saved_params
@@ -142,6 +143,7 @@ class AutoMessaging(scripts.Script):
                                                          im_telegram_token_chatid,
                                                          im_telegram_msg_header)
             log.warning(f"[][send_msg_all][result_telegram_bot]: {result_telegram_bot}")
+
         if EnumTriggetType.TIMER.value in setting_trigger_type:
             self.timer_couunt_threading = Timer(setting_time_count, self.send_msg_all_lets_go,
                                                 [setting__im_line_notify_enabled, setting__im_telegram_enabled,
@@ -159,6 +161,9 @@ class AutoMessaging(scripts.Script):
                 self.timer_couunt_threading = None
                 log.warning(f"[][send_msg_all][Timer] Canceled.")
 
+        if opened_files.__len__() > 0:
+            for img in opened_files:
+                img.close()
         return [self.lin_notify_history_array[0], self.telegram_bot_history_array[0]]
 
     def send_msg_linenotify(self, opened_files, im_line_notify_token, im_line_notify_msg_header):
