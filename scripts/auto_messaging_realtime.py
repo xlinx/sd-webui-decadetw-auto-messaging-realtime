@@ -41,7 +41,7 @@ class EnumSendContent(enum.Enum):
 
 class EnumTriggetType(enum.Enum):
     SDIMAGE = 'SD-Image-generated'
-    TIMER = 'Timer Countdown'
+    TIMER = 'Timer-Countdown'
     STATE_TEMPERATURE_GPU = 'STATE-Temperature-GPU'
     STATE_TEMPERATURE_CPU = 'STATE-Temperature-CPU'
 
@@ -62,28 +62,63 @@ class EnumTriggetType(enum.Enum):
         return [e.value for e in cls]
 
 
-
+class RepeatTimer(Timer):
+    def run(self):
+        while not self.finished.wait(self.interval):
+            self.function(*self.args, **self.kwargs)
 
 
 class AutoMessaging(scripts.Script):
 
     def __init__(self) -> None:
         super().__init__()
+        self.timer_count_threading = None
 
     def title(self):
-        return ("Link fetcher")
+        return "Auto Msg RealTime"
 
     def show(self, is_img2img):
         return scripts.AlwaysVisible
 
-    lin_notify_history_array = []
-    telegram_bot_history_array = []
-    timer_couunt_threading = None
+    lin_notify_history_array = ['', '', '']
+    telegram_bot_history_array = ['', '', '']
 
-    # bot_line_notify_trigger_by_temperature_label = "60°C/140°F"
-    # def on_image_saved_x(self, params):  # image, p, filename, pnginfo
-    #     log.warning(f"[][script_callbacks][on_image_saved_x] name:{params.filename} {params.pnginfo}")
-    #     self.on_image_saved_params = params
+    def timer_cancel(self):
+        log.warning(f"[][Timer][canceling]")
+        if not (self.timer_count_threading is None):
+            self.timer_count_threading.cancel()
+            log.warning(f"[][Timer][canceled]")
+
+    def timer(self, setting__im_line_notify_enabled, setting__im_telegram_enabled,
+              setting_trigger_type, setting_image_count, setting_time_count,
+              setting_temperature,
+              setting_send_content_with,
+              im_line_notify_token, im_line_notify_msg_header,
+              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
+        if setting_time_count > 0:
+            if EnumTriggetType.TIMER.value in setting_trigger_type:
+                if not (self.timer_count_threading is None):
+                    self.timer_count_threading.cancel()
+                    log.warning(f"[][Timer][canceled]@{setting_time_count} secs")
+                self.timer_count_threading = RepeatTimer(setting_time_count, self.send_msg_all_lets_go,
+                                                         [setting__im_line_notify_enabled,
+                                                          setting__im_telegram_enabled,
+                                                          setting_trigger_type, setting_image_count,
+                                                          setting_time_count,
+                                                          setting_temperature,
+                                                          setting_send_content_with,
+                                                          im_line_notify_token, im_line_notify_msg_header,
+                                                          im_telegram_token_botid, im_telegram_token_chatid,
+                                                          im_telegram_msg_header])
+                self.timer_count_threading.start()
+                log.warning(f"[][Timer][Start] countdown @{setting_time_count} secs")
+            else:
+                log.warning(
+                    f"[][Timer][result_line_notify]: {setting_trigger_type} {EnumTriggetType.TIMER} has not check @{setting_time_count} secs")
+
+        else:
+            log.warning(f"[][Timer][setting_time_count] <0 @{setting_time_count} secs")
+            self.timer_count_threading.cancel()
 
     def send_msg_all_from_processing(self, p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                      setting_trigger_type, setting_image_count, setting_time_count,
@@ -106,19 +141,26 @@ class AutoMessaging(scripts.Script):
                                   im_line_notify_token, im_line_notify_msg_header,
                                   im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header)
 
+        # if setting_time_count != 0 and EnumTriggetType.TIMER in setting_trigger_type:
+        #     self.timer(setting__im_line_notify_enabled, setting__im_telegram_enabled,
+        #                setting_trigger_type, setting_image_count, setting_time_count,
+        #                setting_temperature,
+        #                setting_send_content_with,
+        #                im_line_notify_token, im_line_notify_msg_header,
+        #                im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header)
+
     def send_msg_all_lets_go(self, setting__im_line_notify_enabled, setting__im_telegram_enabled,
                              setting_trigger_type, setting_image_count, setting_time_count, setting_temperature,
                              setting_send_content_with,
                              im_line_notify_token, im_line_notify_msg_header,
                              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
-
         opened_files = []
         base_folder = os.path.dirname(__file__)
         global on_image_saved_params
         if on_image_saved_params is not None:
             im_line_notify_msg_header += str(on_image_saved_params.pnginfo)
             im_telegram_msg_header += str(on_image_saved_params.pnginfo)
-            image_path = os.path.join(base_folder, "..", "..", "..",  on_image_saved_params.filename)
+            image_path = os.path.join(base_folder, "..", "..", "..", on_image_saved_params.filename)
             log.warning(f"[][send_msg_all_lets_go][self.on_image_saved_params is not None] image_path:{image_path}")
             image = open(image_path, 'rb')
             opened_files.append(image)
@@ -131,9 +173,6 @@ class AutoMessaging(scripts.Script):
             image = open(image_path, 'rb')
             opened_files.append(image)
 
-        result_line_notify = None
-        result_telegram_bot = None
-
         if setting__im_line_notify_enabled:
             result_line_notify = self.send_msg_linenotify(opened_files, im_line_notify_token, im_line_notify_msg_header)
             log.warning(f"[][send_msg_all][result_line_notify]: {result_line_notify}")
@@ -144,26 +183,6 @@ class AutoMessaging(scripts.Script):
                                                          im_telegram_msg_header)
             log.warning(f"[][send_msg_all][result_telegram_bot]: {result_telegram_bot}")
 
-        if EnumTriggetType.TIMER.value in setting_trigger_type:
-            self.timer_couunt_threading = Timer(setting_time_count, self.send_msg_all_lets_go,
-                                                [setting__im_line_notify_enabled, setting__im_telegram_enabled,
-                                                 setting_trigger_type, setting_image_count, setting_time_count,
-                                                 setting_temperature, setting_send_content_with,
-                                                 im_line_notify_token, im_line_notify_msg_header,
-                                                 im_telegram_token_botid, im_telegram_token_chatid,
-                                                 im_telegram_msg_header])
-            self.timer_couunt_threading.start()
-            log.warning(f"[][send_msg_all][Timer] Countdown in: {setting_time_count} secs")
-
-        else:
-            if self.timer_couunt_threading is not None:
-                self.timer_couunt_threading.cancel()
-                self.timer_couunt_threading = None
-                log.warning(f"[][send_msg_all][Timer] Canceled.")
-
-        if opened_files.__len__() > 0:
-            for img in opened_files:
-                img.close()
         return [self.lin_notify_history_array[0], self.telegram_bot_history_array[0]]
 
     def send_msg_linenotify(self, opened_files, im_line_notify_token, im_line_notify_msg_header):
@@ -247,7 +266,7 @@ class AutoMessaging(scripts.Script):
         with gr.Blocks():
             # gr.Markdown("Blocks")
             with gr.Accordion(open=False, label="Auto Messaging Realtime v20240808"):
-                with gr.Tab("MSG Info"):
+                with gr.Tab("Setting"):
                     gr.Markdown(
                         "* IF [XXX] then [YYY] \n"
                         "* 1 XXX= image (send by each/every 1-100 image generated) \n"
@@ -297,6 +316,11 @@ class AutoMessaging(scripts.Script):
                         row_count=3,
                         col_count=(3, "fixed"),
                     )
+                    with gr.Row():
+                        setting_timer_start = gr.Button(
+                            "Start Timer")
+                        setting_timer_cancel = gr.Button(
+                            "Cancel Timer")
                     setting_send_button = gr.Button(
                         "Test Send All (trigger ALL IMs enabled)")
 
@@ -389,6 +413,15 @@ class AutoMessaging(scripts.Script):
                                               im_telegram_token_botid, im_telegram_token_chatid,
                                               im_telegram_msg_header],
                                       outputs=[im_telegram_notify_history])
+        setting_timer_start.click(self.timer,
+                                  inputs=[setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                                          setting_trigger_type, setting_image_count, setting_time_count,
+                                          setting_temperature_gpu, setting_send_content_with,
+                                          im_line_notify_token, im_line_notify_msg_header,
+                                          im_telegram_token_botid, im_telegram_token_chatid,
+                                          im_telegram_msg_header],
+                                  outputs=[setting_history])
+        setting_timer_cancel.click(self.timer_cancel)
         return [setting__im_line_notify_enabled, setting__im_telegram_enabled,
                 setting_trigger_type, setting_image_count, setting_time_count,
                 setting_temperature_gpu, setting_send_content_with,
@@ -409,42 +442,28 @@ class AutoMessaging(scripts.Script):
                 im_line_notify_token, im_line_notify_msg_header,
                 im_telegram_token_botid, im_telegram_token_chatid,
                 im_telegram_msg_header):
-        log.warning(f"[1][process][setting_trigger_type]: {setting_trigger_type} ")
-
+        #https://builtin.com/software-engineering-perspectives/convert-list-to-dictionary-python
         if setting__im_line_notify_enabled or setting__im_telegram_enabled:
-            self.send_msg_all_from_processing(p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
-                                              setting_trigger_type, setting_image_count, setting_time_count,
-                                              setting_temperature,
-                                              setting_send_content_with,
-                                              im_line_notify_token, im_line_notify_msg_header,
-                                              im_telegram_token_botid, im_telegram_token_chatid,
-                                              im_telegram_msg_header)
+            if setting_trigger_type.__len__() == 0 or setting_send_content_with.__len__() == 0:
+                log.warning(
+                    f"[1][process][setting_trigger_type]No trigger type selected: {setting_trigger_type} setting_send_content_with: {setting_send_content_with} ")
+            else:
+                log.warning(f"[1][process][setting_trigger_type]: {setting_trigger_type} ")
+                self.send_msg_all_from_processing(p, setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                                                  setting_trigger_type, setting_image_count, setting_time_count,
+                                                  setting_temperature,
+                                                  setting_send_content_with,
+                                                  im_line_notify_token, im_line_notify_msg_header,
+                                                  im_telegram_token_botid, im_telegram_token_chatid,
+                                                  im_telegram_msg_header)
 
-
-# def on_after_component(component, **_kwargs):
-#     global txt2img_submit_button, img2img_submit_button
-#     if getattr(component, "elem_id", None) == "txt2img_generate":
-#         txt2img_submit_button = component
-#         return
-#     if getattr(component, "elem_id", None) == "img2img_generate":
-#         img2img_submit_button = component
-
-#name:output\txt2img-images\fantasticmix_k2\10595-3748719078.png
-# {
-# 'parameters': '1girl,A superstar on stage.,, <lora:LCM_15:1>, <lora:ip-adapter-faceid-plusv2_sd15_lora:1>\nNegative
-# prompt: MajicNegative_V2,badhandv4,\nSteps: 6, Sampler: LCM, Schedule type: Automatic, CFG scale: 1.5, Seed: 3748719078,
-# Size: 768x1024, Model hash: 19bbe9faa4, Model: fantasticmix_k2, VAE hash: 07af11b95c, VAE: vae-ft-mse-840000-ema-pruned.safetensors,
-# Clip skip: 2, Lora hashes: "LCM_15: aaebf6360f7d, ip-adapter-faceid-plusv2_sd15_lora: a95a0f4bdcb9",
-# TI hashes: "MajicNegative_V2: a53884ef726b, badhandv4: 5e40d722fc3d", Downcast alphas_cumprod: True, Version: v1.9.4'}
 
 on_image_saved_params = None
+
+
 def on_image_saved(params):  #image, p, filename, pnginfo
     global on_image_saved_params
     on_image_saved_params = params
 
 
-# script_callbacks.on_ui_settings(on_ui_settings)
-# script_callbacks.on_after_component(on_after_component)
-# script_callbacks.on_app_started(add_api_endpoints)
-# script_callbacks.on_before_ui(on_before_ui)
 script_callbacks.on_image_saved(on_image_saved)
