@@ -5,7 +5,6 @@ import os
 from threading import Timer
 
 import gradio as gr
-import pyautogui
 import requests
 
 from modules import scripts, script_callbacks
@@ -29,7 +28,7 @@ class RepeatingTimer(Timer):
 
 class EnumSendContent(enum.Enum):
     SDIMAGE = 'SD-Image-generated'
-    ScreenShot = 'ScreenShot'
+    # ScreenShot = 'ScreenShot'
     TextPrompt = 'Text-Prompt'
     Text_neg_prompt = 'Text-neg_prompt'
     Text_Temperature = 'Text-Temperature'
@@ -166,12 +165,12 @@ class AutoMessaging(scripts.Script):
             opened_files.append(image)
             on_image_saved_params = None
 
-        if EnumSendContent.ScreenShot.value in setting_send_content_with:
-            myscreenshot = pyautogui.screenshot()
-            image_path = os.path.join(base_folder, "..", "myScreenshot.png")
-            myscreenshot.save(image_path)
-            image = open(image_path, 'rb')
-            opened_files.append(image)
+        # if EnumSendContent.ScreenShot.value in setting_send_content_with:
+        #     myscreenshot = pyautogui.screenshot()
+        #     image_path = os.path.join(base_folder, "..", "myScreenshot.png")
+        #     myscreenshot.save(image_path)
+        #     image = open(image_path, 'rb')
+        #     opened_files.append(image)
 
         if setting__im_line_notify_enabled:
             result_line_notify = self.send_msg_linenotify(opened_files, im_line_notify_token, im_line_notify_msg_header)

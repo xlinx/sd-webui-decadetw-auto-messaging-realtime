@@ -17,15 +17,14 @@
 * When u outdoor, receive SD-web-ui State.
   * [Receive] Image
     * SD-image-generated
-    * PC screenshot
-      * u can put the windows-build system monitor beside for screenshot capture
+    * ~~PC screenshot~~
+      * ~~u can put the windows-build system monitor beside for screenshot capture~~
   * [Receive] Text
     * SD-Prompt
     * PC-State-temperature (working...)
       * Nvidia card temperature
       * AMD card temperature
       * CPU temperature
-  * [Receive] SD-Running-PC-Screenshot
   
 * Just look IM app to check result from web-ui
 * [Rx] Monitor ur Web-ui when u eating, GYM, working
@@ -48,15 +47,8 @@
     <td colspan="1"><img width="100%" src="images/r7.jpg"></td>
     <td colspan="1"><img width="65%" src="images/r77.jpg"></td>
  </tr>
-
 <tr>
-    <td colspan="2"><b style="font-size:30px">4. Monitor whole ScreenShot on Phone</b></td>
- </tr>
-<tr >
-    <td colspan="2"><img width="100%" src="images/r2.png"></td>
- </tr>
-<tr>
-    <td colspan="2"><b style="font-size:30px">5. Auto Messaging Realtime UI</b></td>
+    <td colspan="2"><b style="font-size:30px">4. Auto Messaging Realtime UI</b></td>
  </tr>
 <tr >
     <td colspan="2"><img width="100%" src="images/r3.png"></td>
