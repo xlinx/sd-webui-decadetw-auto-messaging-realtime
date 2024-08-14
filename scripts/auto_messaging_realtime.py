@@ -28,7 +28,7 @@ class RepeatingTimer(Timer):
 
 
 class EnumSendContent(enum.Enum):
-    SDIMAGE = 'SD-Image-generated'
+    SDIMAGE = 'SD-Image'
     # ScreenShot = 'ScreenShot' # for the developer, if u know what you do, u can enable this by yourself.
     TextPrompt = 'Text-Prompt'
     Text_neg_prompt = 'Text-negPrompt'
@@ -328,7 +328,7 @@ class AutoMessaging(scripts.Script):
                     gr.Markdown("* LINE-Notify only need [Token]\n"
                                 "* add Notify as friend or add that to group, which don`t need chatID")
 
-                    im_line_notify_token = gr.Textbox(label=" 1.[im_line_notify_token]", lines=1,
+                    im_line_notify_token = gr.Textbox(label="1.[im_line_notify_token]", lines=1,
                                                       value="",
                                                       placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
                                                       #tcnDSnAR6Gl6pTMBfQ4wOxqtq0eSyXqqJ9Q1Hck4dRO
@@ -352,7 +352,7 @@ class AutoMessaging(scripts.Script):
                     gr.Markdown("* Telegram-bot need [BotToken] and [ChatID ] \n"
                                 "* how to get, check: https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime")
                     with gr.Row():
-                        im_telegram_token_botid = gr.Textbox(label=" 1.1 [BotToken]", lines=1,
+                        im_telegram_token_botid = gr.Textbox(label="1.1 [BotToken]", lines=1,
                                                              info="format: xxxx:yyyyyyyy",
                                                              value="",
                                                              placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
@@ -364,7 +364,7 @@ class AutoMessaging(scripts.Script):
                     im_telegram_getupdates = gr.Button("1.2 Get Token Info: ChatId")
 
                     with gr.Row():
-                        im_telegram_token_chatid = gr.Textbox(label=" 2.1 [ChatID] ", lines=1,
+                        im_telegram_token_chatid = gr.Textbox(label="2.1 [ChatID] ", lines=1,
                                                               info="format:1234567890. can be send to personal or group",
                                                               value="",
                                                               placeholder="XXXXXXXXXX",  #1967680189
