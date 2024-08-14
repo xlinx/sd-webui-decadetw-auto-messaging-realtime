@@ -32,6 +32,7 @@ class EnumSendContent(enum.Enum):
     # ScreenShot = 'ScreenShot' # for the developer, if u know what you do, u can enable this by yourself.
     TextPrompt = 'Text-Prompt'
     Text_neg_prompt = 'Text-negPrompt'
+    PNG_INFO = 'PNG-INFO'
     Text_Temperature = 'Text-Temperature'
 
     @classmethod
@@ -155,8 +156,9 @@ class AutoMessaging(scripts.Script):
         base_folder = os.path.dirname(__file__)
         global on_image_saved_params
         if on_image_saved_params is not None:
-            im_line_notify_msg_header += str(on_image_saved_params.pnginfo)
-            im_telegram_msg_header += str(on_image_saved_params.pnginfo)
+            if EnumSendContent.PNG_INFO.value in setting_send_content_with:
+                im_line_notify_msg_header += str(on_image_saved_params.pnginfo)
+                im_telegram_msg_header += str(on_image_saved_params.pnginfo)
             image_path = os.path.join(base_folder, "..", "..", "..", on_image_saved_params.filename)
             image = open(image_path, 'rb')
             opened_files.append(image)
@@ -262,7 +264,7 @@ class AutoMessaging(scripts.Script):
         return result
 
     def ui(self, is_img2img):
-        with gr.Blocks():
+        with gr.Blocks() as gr_blocks:
             # gr.Markdown("Blocks")
             with gr.Accordion(open=False, label="Auto Messaging Realtime v20240808"):
                 with gr.Tab("Setting"):
@@ -273,8 +275,8 @@ class AutoMessaging(scripts.Script):
                         "* 3 XXX= PC-state (GPU)\n"
                         "* 4 YYY= send text or sd-image \n"
                     )
-                    setting__im_line_notify_enabled = gr.Checkbox(label="0. Enable LINE-Notify", value=False)
-                    setting__im_telegram_enabled = gr.Checkbox(label="0.Enable Telegram-bot", value=False)
+                    setting__im_line_notify_enabled = gr.Checkbox(label=" 0.Enable LINE-Notify", value=False)
+                    setting__im_telegram_enabled = gr.Checkbox(label=" 0.Enable Telegram-bot", value=False)
 
                     setting_trigger_type = gr.CheckboxGroup(
                         EnumTriggetType.values(),
@@ -326,12 +328,14 @@ class AutoMessaging(scripts.Script):
                     gr.Markdown("* LINE-Notify only need [Token]\n"
                                 "* add Notify as friend or add that to group, which don`t need chatID")
 
-                    im_line_notify_token = gr.Textbox(label="1.[im_line_notify_token]", lines=1,
-                                                      value="tcnDSnAR6Gl6pTMBfQ4wOxqtq0eSyXqqJ9Q1Hck4dRO",
-                                                      placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                    im_line_notify_token = gr.Textbox(label=" 1.[im_line_notify_token]", lines=1,
+                                                      value="",
+                                                      placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                                      #tcnDSnAR6Gl6pTMBfQ4wOxqtq0eSyXqqJ9Q1Hck4dRO
+                                                      elem_id="auto-msg-realtime-line-notify-token"
                                                       )
                     im_line_notify_msg_header = gr.Textbox(label="2. [msg header]", lines=1,
-                                                           value="[send from web-ui-line-notify]",
+                                                           value="[From web-ui-line-notify]",
                                                            placeholder="[send from web-ui]"
                                                            )
                     im_line_notify_history = gr.Dataframe(
@@ -348,24 +352,29 @@ class AutoMessaging(scripts.Script):
                     gr.Markdown("* Telegram-bot need [BotToken] and [ChatID ] \n"
                                 "* how to get, check: https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime")
                     with gr.Row():
-                        im_telegram_token_botid = gr.Textbox(label="1.1 [BotToken]", lines=1,
+                        im_telegram_token_botid = gr.Textbox(label=" 1.1 [BotToken]", lines=1,
                                                              info="format: xxxx:yyyyyyyy",
-                                                             value="7376923093:AAGtCtd9Ogiq9yT1IBsbRD6ENQ5DbAqL6Ig",
-                                                             placeholder="7376923093:AAGtCtd9Ogiq9yT1IBsbRD6ENQ5DbAqL6Ig"
+                                                             value="",
+                                                             placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                                             #7376923093:AAGtCtd9Ogiq9yT1IBsbRD6ENQ5DbAqL6Ig
+                                                             elem_id="auto-msg-realtime-telegram-bot-token"
+
                                                              )
                         im_telegram_getupdates_result = gr.JSON()
                     im_telegram_getupdates = gr.Button("1.2 Get Token Info: ChatId")
 
                     with gr.Row():
-                        im_telegram_token_chatid = gr.Textbox(label="2.1 [ChatID] ", lines=1,
+                        im_telegram_token_chatid = gr.Textbox(label=" 2.1 [ChatID] ", lines=1,
                                                               info="format:1234567890. can be send to personal or group",
-                                                              value="1967680189",
-                                                              placeholder="1967680189"
+                                                              value="",
+                                                              placeholder="XXXXXXXXXX",  #1967680189
+                                                              elem_id="auto-msg-realtime-telegram-bot-chat-id"
+
                                                               )
 
                         im_telegram_msg_header = gr.Textbox(label="2.2 [msg header]", lines=1,
                                                             info="append on every message. like prompt or temperature.",
-                                                            value="[send from web-ui-telegram-bot]",
+                                                            value="[From web-ui-telegram-bot]",
                                                             placeholder="[send from web-ui]"
                                                             )
                     im_telegram_notify_history = gr.Dataframe(
@@ -425,6 +434,25 @@ class AutoMessaging(scripts.Script):
                                           im_telegram_msg_header],
                                   outputs=[setting_history])
         setting_timer_cancel.click(self.timer_cancel)
+        im_line_notify_token.change(fn=None,
+                                    _js="function(v){localStorage.setItem('im_line_notify_token',v)}",
+                                    inputs=im_line_notify_token)
+        im_telegram_token_botid.change(fn=None,
+                                       _js="function(v){localStorage.setItem('im_telegram_token_botid',v)}",
+                                       inputs=im_telegram_token_botid)
+        im_telegram_token_chatid.change(fn=None,
+                                        _js="function(v){localStorage.setItem('im_telegram_token_chatid',v)}",
+                                        inputs=im_telegram_token_chatid)
+
+        gr_blocks.load(fn=None, outputs=[im_line_notify_token, im_telegram_token_botid, im_telegram_token_chatid],
+                       _js="function(){return ["
+                           "localStorage.getItem('im_line_notify_token'),"
+                           "localStorage.getItem('im_telegram_token_botid'),"
+                           "localStorage.getItem('im_telegram_token_chatid')]}")
+
+        # gr_blocks.load(fn=None, inputs=None, outputs=[im_telegram_token_botid], _js="function(){load_LocalStorge('auto-msg-realtime-line-notify-token', 'auto-msg-realtime-line-notify-token')}")
+        # gr_blocks.load(fn=None, inputs=None, outputs=[im_telegram_token_chatid], _js="function(){load_LocalStorge('auto-msg-realtime-telegram-bot-chat-id', 'auto-msg-realtime-telegram-bot-chat-id')}")
+
         return [setting__im_line_notify_enabled, setting__im_telegram_enabled,
                 setting_trigger_type, setting_image_count, setting_time_count,
                 setting_temperature_gpu, setting_temperature_cpu, setting_send_content_with,
@@ -432,24 +460,34 @@ class AutoMessaging(scripts.Script):
                 im_telegram_token_botid, im_telegram_token_chatid,
                 im_telegram_msg_header]
 
-    def after_component(self, component, **kwargs):
-        if kwargs.get("elem_id") == "txt2img_prompt":
-            self.boxx = component
-        if kwargs.get("elem_id") == "img2img_prompt":
-            self.boxxIMG = component
 
-    def process(self, p: StableDiffusionProcessingTxt2Img, *args):
+def after_component(self, component, **kwargs):
+    if kwargs.get("elem_id") == "txt2img_prompt":
+        self.boxx = component
+    if kwargs.get("elem_id") == "img2img_prompt":
+        self.boxxIMG = component
+    # if kwargs.get("elem_id") == "auto-msg-realtime-line-notify-token":
+    #     im_line_notify_token
 
-        # indication = enum.Enum('Indication', dict(keys))
-        global args_dict
-        args_dict = dict(zip(args_keys, args))
-        log.warning(f"[0][process][p/args]: {p} {args} {args_dict}")
-        if args_dict.get('setting__im_line_notify_enabled') or args_dict.get('setting__im_telegram_enabled'):
-            if EnumTriggetType.SDIMAGE.value in args_dict.get('setting_trigger_type'):
-                self.send_msg_all_from_processing(p, *args)
 
-    # def postprocess_image(self, p, pp: PostprocessImageArgs, *args):
-    #     log.warning(f"[0][postprocess_image][p/pp/args]: {p} {pp} {args}")
+def process(self, p: StableDiffusionProcessingTxt2Img, *args):
+    # indication = enum.Enum('Indication', dict(keys))
+    global args_dict
+    args_dict = dict(zip(args_keys, args))
+    # log.warning(f"[0][process][p/args]: {p} {args} {args_dict}")
+
+    if args_dict.get('setting__im_line_notify_enabled') or args_dict.get('setting__im_telegram_enabled'):
+        if EnumTriggetType.SDIMAGE.value in args_dict.get('setting_trigger_type'):
+            self.send_msg_all_from_processing(p, *args)
+
+# def postprocess_image(self, p, pp: PostprocessImageArgs, *args):
+#     log.warning(f"[0][postprocess_image][p/pp/args]: {p} {pp} {args}")
+
+
+def print_obj_x(obj):
+    for attr in dir(obj):
+        if not attr.startswith("__"):
+            print(attr + "==>", getattr(obj, attr))
 
 
 args_keys = ['setting__im_line_notify_enabled', 'setting__im_telegram_enabled',
@@ -467,6 +505,10 @@ def on_image_saved(params):  #image, p, filename, pnginfo
     on_image_saved_params = params
 
 
-script_callbacks.on_image_saved(on_image_saved)
+# def init_value():
+#     const elems = document.getElementsByTagName('gradio-app');
+#     container = gradioApp().getElementById('script_txt2img_adetailer_ad_main_accordion');
 
+script_callbacks.on_image_saved(on_image_saved)
+# script_callbacks.on_app_started(init_value)
 # https://builtin.com/software-engineering-perspectives/convert-list-to-dictionary-python
