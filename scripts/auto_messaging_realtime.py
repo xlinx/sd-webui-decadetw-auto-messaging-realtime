@@ -460,28 +460,31 @@ class AutoMessaging(scripts.Script):
                 im_telegram_token_botid, im_telegram_token_chatid,
                 im_telegram_msg_header]
 
+    def after_component(self, component, **kwargs):
+        if kwargs.get("elem_id") == "txt2img_prompt":
+            self.boxx = component
+        if kwargs.get("elem_id") == "img2img_prompt":
+            self.boxxIMG = component
+        # if kwargs.get("elem_id") == "auto-msg-realtime-line-notify-token":
+        #     im_line_notify_token
 
-def after_component(self, component, **kwargs):
-    if kwargs.get("elem_id") == "txt2img_prompt":
-        self.boxx = component
-    if kwargs.get("elem_id") == "img2img_prompt":
-        self.boxxIMG = component
-    # if kwargs.get("elem_id") == "auto-msg-realtime-line-notify-token":
-    #     im_line_notify_token
+    def postprocess(self, p, processed, *args):
+        # log.warning(f"[9][postprocess][ p, processed, *args]: {print_obj_x(p)} {print_obj_x(processed)} {args}")
+        global args_dict
+        args_dict = dict(zip(args_keys, args))
+        if args_dict.get('setting__im_line_notify_enabled') or args_dict.get('setting__im_telegram_enabled'):
+            if EnumTriggetType.SDIMAGE.value in args_dict.get('setting_trigger_type'):
+                self.send_msg_all_from_processing(p, *args)
 
-
-def process(self, p: StableDiffusionProcessingTxt2Img, *args):
-    # indication = enum.Enum('Indication', dict(keys))
-    global args_dict
-    args_dict = dict(zip(args_keys, args))
-    # log.warning(f"[0][process][p/args]: {p} {args} {args_dict}")
-
-    if args_dict.get('setting__im_line_notify_enabled') or args_dict.get('setting__im_telegram_enabled'):
-        if EnumTriggetType.SDIMAGE.value in args_dict.get('setting_trigger_type'):
-            self.send_msg_all_from_processing(p, *args)
-
-# def postprocess_image(self, p, pp: PostprocessImageArgs, *args):
-#     log.warning(f"[0][postprocess_image][p/pp/args]: {p} {pp} {args}")
+    # def postprocess_image(self, p, pp, *args):
+    #     log.warning(f"[1][postprocess_image][ p, processed, *args]: {print_obj_x(p)} {print_obj_x(pp)} {args}")
+    #
+    # def postprocess_image_after_composite(self, p, pp, *args):
+    #     log.warning(
+    #         f"[2][postprocess_image_after_composite][ p, processed, *args]: {print_obj_x(p)} {print_obj_x(pp)} {args}")
+    #
+    # def process(self, p, *args):
+    #     log.warning(f"[0][process][p, *args]: {print_obj_x(p)} {args}")
 
 
 def print_obj_x(obj):
@@ -505,6 +508,7 @@ def on_image_saved(params):  #image, p, filename, pnginfo
     on_image_saved_params = params
 
 
+# indication = enum.Enum('Indication', dict(keys))
 # def init_value():
 #     const elems = document.getElementsByTagName('gradio-app');
 #     container = gradioApp().getElementById('script_txt2img_adetailer_ad_main_accordion');
