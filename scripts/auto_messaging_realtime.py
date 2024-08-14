@@ -510,5 +510,5 @@ def on_image_saved(params):  #image, p, filename, pnginfo
 #     container = gradioApp().getElementById('script_txt2img_adetailer_ad_main_accordion');
 
 script_callbacks.on_image_saved(on_image_saved)
-# script_callbacks.on_app_started(init_value)
+# script_callbacks.on_app_started(init_value )
 # https://builtin.com/software-engineering-perspectives/convert-list-to-dictionary-python
