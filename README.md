@@ -1,4 +1,23 @@
 # sd-webui-decadetw-Auto-Messaging-realtime
+<hr/>
+<p align="center">
+  <a href="https://github.com/feross/standard">
+    <img src="https://img.shields.io/badge/code%20style-standard-green.svg?style=flat-square" alt="">
+  </a>
+  <a href="https://github.com/xlinx/sd-webui-decadetw-Auto-Messaging-realtime/releases">
+    <img src="https://img.shields.io/github/downloads/xlinx/sd-webui-decadetw-Auto-Messaging-realtime/total.svg?style=flat-square" alt="">
+  </a>
+   <a href="https://travis-ci.org/xlinx/sd-webui-decadetw-Auto-Messaging-realtime/builds">
+    <img src="https://img.shields.io/travis/xlinx/sd-webui-decadetw-Auto-Messaging-realtime.svg?style=flat-square" alt="">
+  </a>
+  <a href="https://github.com/xlinx/sd-webui-decadetw-Auto-Messaging-realtime/releases/latest">
+    <img src="https://img.shields.io/github/release/xlinx/sd-webui-decadetw-Auto-Messaging-realtime?style=flat-square" alt="">
+  </a>
+<a href="https://github.com/xlinx/sd-webui-decadetw-Auto-Messaging-realtime/issues">
+    <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square" alt="">
+</a>
+</p>
+
 * Automatic1111 extension
 * Messaging by time | result | states
   * every 10|60|120 sec

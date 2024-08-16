@@ -32,7 +32,8 @@ class EnumSendContent(enum.Enum):
     # ScreenShot = 'ScreenShot' # for the developer, if u know what you do, u can enable this by yourself.
     TextPrompt = 'Text-Prompt'
     Text_neg_prompt = 'Text-negPrompt'
-    PNG_INFO = 'PNG-INFO'
+    PNG_INFO = 'PNG-INFO(max 4096 characters)'
+    SD_INFO = 'SD-INFO(max 4096 characters)'
     Text_Temperature = 'Text-Temperature'
 
     @classmethod
@@ -130,12 +131,12 @@ class AutoMessaging(scripts.Script):
                                      im_telegram_msg_header):
 
         if EnumSendContent.TextPrompt.value in setting_send_content_with:
-            im_line_notify_msg_header += p.prompt
-            im_telegram_msg_header += p.prompt
+            im_line_notify_msg_header += '\n▣prompt:'+p.prompt
+            im_telegram_msg_header += '\n▣prompt:'+p.prompt
 
         if EnumSendContent.Text_neg_prompt.value in setting_send_content_with:
-            im_line_notify_msg_header += p.negative_prompt
-            im_telegram_msg_header += p.negative_prompt
+            im_line_notify_msg_header += '\n▣neg-prompt:'+p.negative_prompt
+            im_telegram_msg_header += '\n▣neg-prompt:'+p.negative_prompt
 
         self.send_msg_all_lets_go(setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                   setting_trigger_type, setting_image_count, setting_time_count,
@@ -157,8 +158,14 @@ class AutoMessaging(scripts.Script):
         global on_image_saved_params
         if on_image_saved_params is not None:
             if EnumSendContent.PNG_INFO.value in setting_send_content_with:
-                im_line_notify_msg_header += str(on_image_saved_params.pnginfo)
-                im_telegram_msg_header += str(on_image_saved_params.pnginfo)
+                im_line_notify_msg_header += '\n▣ImgFile-Info:'+str(on_image_saved_params.filename)
+                im_telegram_msg_header += '\n▣ImgFile-Info:'+str(on_image_saved_params.filename)
+            if EnumSendContent.SD_INFO.value in setting_send_content_with:
+                im_line_notify_msg_header += '\n▣SD-Info:'+str(on_image_saved_params.pnginfo)
+                im_telegram_msg_header += '\n▣SD-Info:'+str(on_image_saved_params.pnginfo)
+
+
+
             image_path = os.path.join(base_folder, "..", "..", "..", on_image_saved_params.filename)
             image = open(image_path, 'rb')
             opened_files.append(image)
@@ -220,6 +227,9 @@ class AutoMessaging(scripts.Script):
             f"[][starting][send_msg_telegram]: {opened_files, im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header}")
 
         assert type(im_telegram_msg_header) == str, "must be str"
+
+        im_telegram_msg_header = trim_string(str(im_telegram_msg_header), 4000, '...(tele img caption max len=4096)')
+
         # msg_all = bot_telegram_msg_header + str(bot_line_notify_trigger_by) + str(bot_line_notify_send_with)
         headers = {'Content-Type': 'application/json', "cache-control": "no-cache"}
         result = ''
@@ -485,7 +495,11 @@ class AutoMessaging(scripts.Script):
     #
     # def process(self, p, *args):
     #     log.warning(f"[0][process][p, *args]: {print_obj_x(p)} {args}")
-
+def trim_string(s: str, limit: int, ellipsis='…') -> str:
+    s = s.strip()
+    if len(s) > limit:
+        return s[:limit-1].strip() + ellipsis
+    return s
 
 def print_obj_x(obj):
     for attr in dir(obj):
