@@ -27,6 +27,16 @@ class RepeatingTimer(Timer):
             self.finished.wait(self.interval)
 
 
+class EnumSendImageResult(enum.Enum):
+    ALL = 'SD-Image-All'
+    ONLY_GRID = 'Grid-Image-only'
+    NO_GRID = 'Each-Image-noGrid'
+
+    @classmethod
+    def values(cls):
+        return [e.value for e in cls]
+
+
 class EnumSendContent(enum.Enum):
     SDIMAGE = 'SD-Image'
     # ScreenShot = 'ScreenShot' # for the developer, if u know what you do, u can enable this by yourself.
@@ -96,7 +106,7 @@ class AutoMessaging(scripts.Script):
               setting_temperature,
               setting_send_content_with,
               im_line_notify_token, im_line_notify_msg_header,
-              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header):
+              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header,setup_enum_send_image_result_radio):
         if setting_time_count > 0:
             if EnumTriggetType.TIMER.value in setting_trigger_type:
                 if not (self.timer_count_threading is None):
@@ -111,7 +121,8 @@ class AutoMessaging(scripts.Script):
                                                           setting_send_content_with,
                                                           im_line_notify_token, im_line_notify_msg_header,
                                                           im_telegram_token_botid, im_telegram_token_chatid,
-                                                          im_telegram_msg_header])
+                                                          im_telegram_msg_header,
+                                                          setup_enum_send_image_result_radio])
                 self.timer_count_threading.start()
                 log.warning(f"[][Timer][Start] countdown @{setting_time_count} secs")
             else:
@@ -128,15 +139,15 @@ class AutoMessaging(scripts.Script):
                                      setting_send_content_with,
                                      im_line_notify_token, im_line_notify_msg_header,
                                      im_telegram_token_botid, im_telegram_token_chatid,
-                                     im_telegram_msg_header):
+                                     im_telegram_msg_header, setup_enum_send_image_result_radio):
 
         if EnumSendContent.TextPrompt.value in setting_send_content_with:
-            im_line_notify_msg_header += '\n▣prompt:'+p.prompt
-            im_telegram_msg_header += '\n▣prompt:'+p.prompt
+            im_line_notify_msg_header += '\n▣prompt:' + p.prompt
+            im_telegram_msg_header += '\n▣prompt:' + p.prompt
 
         if EnumSendContent.Text_neg_prompt.value in setting_send_content_with:
-            im_line_notify_msg_header += '\n▣neg-prompt:'+p.negative_prompt
-            im_telegram_msg_header += '\n▣neg-prompt:'+p.negative_prompt
+            im_line_notify_msg_header += '\n▣neg-prompt:' + p.negative_prompt
+            im_telegram_msg_header += '\n▣neg-prompt:' + p.negative_prompt
 
         self.send_msg_all_lets_go(setting__im_line_notify_enabled, setting__im_telegram_enabled,
                                   setting_trigger_type, setting_image_count, setting_time_count,
@@ -144,7 +155,7 @@ class AutoMessaging(scripts.Script):
                                   setting_send_content_with,
                                   im_line_notify_token, im_line_notify_msg_header,
                                   im_telegram_token_botid, im_telegram_token_chatid,
-                                  im_telegram_msg_header)
+                                  im_telegram_msg_header, setup_enum_send_image_result_radio)
 
     def send_msg_all_lets_go(self, setting__im_line_notify_enabled, setting__im_telegram_enabled,
                              setting_trigger_type, setting_image_count, setting_time_count,
@@ -152,24 +163,33 @@ class AutoMessaging(scripts.Script):
                              setting_send_content_with,
                              im_line_notify_token, im_line_notify_msg_header,
                              im_telegram_token_botid, im_telegram_token_chatid,
-                             im_telegram_msg_header):
+                             im_telegram_msg_header, setup_enum_send_image_result_radio):
         opened_files = []
         base_folder = os.path.dirname(__file__)
         global on_image_saved_params
         if on_image_saved_params is not None:
             if EnumSendContent.PNG_INFO.value in setting_send_content_with:
-                im_line_notify_msg_header += '\n▣ImgFile-Info:'+str(on_image_saved_params.filename)
-                im_telegram_msg_header += '\n▣ImgFile-Info:'+str(on_image_saved_params.filename)
+                for ele in on_image_saved_params:
+                    im_line_notify_msg_header += '\n▣ImgFile-Info:' + str(ele.filename)
+                    im_telegram_msg_header += '\n▣ImgFile-Info:' + str(ele.filename)
             if EnumSendContent.SD_INFO.value in setting_send_content_with:
-                im_line_notify_msg_header += '\n▣SD-Info:'+str(on_image_saved_params.pnginfo)
-                im_telegram_msg_header += '\n▣SD-Info:'+str(on_image_saved_params.pnginfo)
+                for ele in on_image_saved_params:
+                    im_line_notify_msg_header += '\n▣SD-Info:' + str(ele.pnginfo)
+                    im_telegram_msg_header += '\n▣SD-Info:' + str(ele.pnginfo)
 
+            if EnumSendImageResult.ONLY_GRID.value in setup_enum_send_image_result_radio:
+                if on_image_saved_params.__len__() > 1:
+                    while on_image_saved_params.__len__() > 1:
+                        on_image_saved_params.pop(0)
+            elif EnumSendImageResult.NO_GRID.value in setup_enum_send_image_result_radio:
+                if on_image_saved_params.__len__() > 1:
+                    on_image_saved_params.pop()
 
-
-            image_path = os.path.join(base_folder, "..", "..", "..", on_image_saved_params.filename)
-            image = open(image_path, 'rb')
-            opened_files.append(image)
-            on_image_saved_params = None
+            for ele in on_image_saved_params:
+                image_path = os.path.join(base_folder, "..", "..", "..", ele.filename)
+                image = open(image_path, 'rb')
+                opened_files.append(image)
+            on_image_saved_params = []
 
         # for the developer, if u know what you do, u can enable this by yourself.
         # if EnumSendContent.ScreenShot.value in setting_send_content_with:
@@ -228,8 +248,8 @@ class AutoMessaging(scripts.Script):
 
         assert type(im_telegram_msg_header) == str, "must be str"
 
-        im_telegram_msg_header = trim_string(str(im_telegram_msg_header), 4000, '...(tele img caption max len=4096)')
-
+        # im_telegram_msg_header = trim_string(str(im_telegram_msg_header), 1000, '...(tele img caption max len=4096)')
+        im_telegram_msg_header = im_telegram_msg_header[: 1000]+'...(tele img caption max len=4096)'
         # msg_all = bot_telegram_msg_header + str(bot_line_notify_trigger_by) + str(bot_line_notify_send_with)
         headers = {'Content-Type': 'application/json', "cache-control": "no-cache"}
         result = ''
@@ -278,20 +298,14 @@ class AutoMessaging(scripts.Script):
             # gr.Markdown("Blocks")
             with gr.Accordion(open=False, label="Auto Messaging Realtime v20240808"):
                 with gr.Tab("Setting"):
-                    gr.Markdown(
-                        "* IF [XXX] then [YYY] \n"
-                        "* 1 XXX= image (send by every 1-100 image generated) \n"
-                        "* 2 XXX= time (send by every seconds. (0 to disable))\n"
-                        "* 3 XXX= PC-state (GPU)\n"
-                        "* 4 YYY= send text or sd-image \n"
-                    )
+
                     setting__im_line_notify_enabled = gr.Checkbox(label=" 0.Enable LINE-Notify", value=False)
                     setting__im_telegram_enabled = gr.Checkbox(label=" 0.Enable Telegram-bot", value=False)
 
                     setting_trigger_type = gr.CheckboxGroup(
                         EnumTriggetType.values(),
                         value=EnumTriggetType.values(),
-                        label="1.  IF [[[ XXX ]]] Then YYY",
+                        label="1. Trigger: IF [[[ XXX ]]] Then YYY",
                         info="When should send? trigger events by XXX?")
                     with gr.Row():
                         setting_image_count = gr.Slider(1, 100, value=1,
@@ -317,15 +331,12 @@ class AutoMessaging(scripts.Script):
                         value=EnumSendContent.values(),
                         label="3. IF XXX Then [[[ YYY ]]]",
                         info="Send what? then YYY(send text, image or both)?")
-                    setting_history = gr.Dataframe(
-                        interactive=True,
-                        wrap=True,
-                        label="4. History",
-                        headers=["TimeStamp", "Response", "Msg"],
-                        datatype=["str", "str", "str"],
-                        row_count=3,
-                        col_count=(3, "fixed"),
-                    )
+
+                    setup_enum_send_image_result_radio = gr.Radio(EnumSendImageResult.values(),
+                                                                  value='Grid-Image-only',
+                                                                  label="4. IF [Step.3 SD-Image] checked & batch size>1 ; Send which one?",
+                                                                  info="Grid-Image-only is recommended")
+
                     with gr.Row():
                         setting_timer_start = gr.Button(
                             "Start Timer-Countdown")
@@ -333,7 +344,15 @@ class AutoMessaging(scripts.Script):
                             "Cancel Timer-Countdown")
                     setting_send_button = gr.Button(
                         "Test Send Message (enabled.)")
-
+                    setting_history = gr.Dataframe(
+                        interactive=True,
+                        wrap=True,
+                        label="5. History",
+                        headers=["TimeStamp", "Response", "Msg"],
+                        datatype=["str", "str", "str"],
+                        row_count=3,
+                        col_count=(3, "fixed"),
+                    )
                 with gr.Tab("LINE-Notify"):
                     gr.Markdown("* LINE-Notify only need [Token]\n"
                                 "* add Notify as friend or add that to group, which don`t need chatID")
@@ -397,9 +416,23 @@ class AutoMessaging(scripts.Script):
                         col_count=(3, "fixed"),
                     )
                     im_telegram_send_button = gr.Button("Test Send (Telegram)")
-                with gr.Tab("WhatsApp&others"):
+                with gr.Tab("WhatsApp & manual"):
                     gr.Markdown(
+                        "### Other IM app \n"
                         "* Seems only for business use, I can`t find the way now. IF u know or others IM app, plz let me know. leave command on git. https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime")
+                    gr.Markdown(
+                        "### Trigger manual \n"
+                        "* IF [XXX] then [YYY] \n"
+                        "* 1 XXX= image (send by every 1-100 image generated) \n"
+                        "* 2 XXX= time (send by every seconds. (0 to disable))\n"
+                        "* 3 XXX= PC-state (GPU)\n"
+                        "* 4 YYY= send text or sd-image \n"
+                    )
+                    gr.Markdown(
+                                "### Max request limit \n"
+                                "* Max 1000 request per hour(includes text image), 10MB per file. \n"
+                                "* API Rate Limit plz check: https://notify-bot.line.me/doc/en/ | https://core.telegram.org/bots/api\n"
+                                )
 
         im_telegram_getupdates.click(self.tel_getupdate,
                                      inputs=[im_telegram_token_botid],
@@ -415,7 +448,8 @@ class AutoMessaging(scripts.Script):
                                           setting_trigger_type, setting_image_count, setting_time_count,
                                           setting_temperature_gpu, setting_temperature_cpu, setting_send_content_with,
                                           im_line_notify_token, im_line_notify_msg_header,
-                                          im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header],
+                                          im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header,
+                                          setup_enum_send_image_result_radio],
                                   outputs=[setting_history])
         im_line_notify_send_button.click(self.send_msg_all_lets_go,
                                          inputs=[setting__im_line_notify_enabled, setting__im_telegram_enabled,
@@ -424,7 +458,8 @@ class AutoMessaging(scripts.Script):
                                                  setting_send_content_with,
                                                  im_line_notify_token, im_line_notify_msg_header,
                                                  im_telegram_token_botid, im_telegram_token_chatid,
-                                                 im_telegram_msg_header],
+                                                 im_telegram_msg_header,
+                                                 setup_enum_send_image_result_radio],
                                          outputs=[im_line_notify_history])
         im_telegram_send_button.click(self.send_msg_all_lets_go,
                                       inputs=[setting__im_line_notify_enabled, setting__im_telegram_enabled,
@@ -433,7 +468,8 @@ class AutoMessaging(scripts.Script):
                                               setting_send_content_with,
                                               im_line_notify_token, im_line_notify_msg_header,
                                               im_telegram_token_botid, im_telegram_token_chatid,
-                                              im_telegram_msg_header],
+                                              im_telegram_msg_header,
+                                              setup_enum_send_image_result_radio],
                                       outputs=[im_telegram_notify_history])
         setting_timer_start.click(self.timer,
                                   inputs=[setting__im_line_notify_enabled, setting__im_telegram_enabled,
@@ -468,7 +504,8 @@ class AutoMessaging(scripts.Script):
                 setting_temperature_gpu, setting_temperature_cpu, setting_send_content_with,
                 im_line_notify_token, im_line_notify_msg_header,
                 im_telegram_token_botid, im_telegram_token_chatid,
-                im_telegram_msg_header]
+                im_telegram_msg_header,
+                setup_enum_send_image_result_radio]
 
     def after_component(self, component, **kwargs):
         if kwargs.get("elem_id") == "txt2img_prompt":
@@ -495,11 +532,14 @@ class AutoMessaging(scripts.Script):
     #
     # def process(self, p, *args):
     #     log.warning(f"[0][process][p, *args]: {print_obj_x(p)} {args}")
+
+
 def trim_string(s: str, limit: int, ellipsis='…') -> str:
     s = s.strip()
     if len(s) > limit:
-        return s[:limit-1].strip() + ellipsis
+        return s[:limit - 1].strip() + ellipsis
     return s
+
 
 def print_obj_x(obj):
     for attr in dir(obj):
@@ -513,13 +553,20 @@ args_keys = ['setting__im_line_notify_enabled', 'setting__im_telegram_enabled',
              'im_line_notify_token', 'im_line_notify_msg_header',
              'im_telegram_token_botid', 'im_telegram_token_chatid',
              'im_telegram_msg_header']
-on_image_saved_params = None
+on_image_saved_params = []
 args_dict = None
 
 
 def on_image_saved(params):  #image, p, filename, pnginfo
     global on_image_saved_params
-    on_image_saved_params = params
+    on_image_saved_params.append(params)
+    # log.warning(f"[event][on_image_saved][params]: {on_image_saved_params} {print_obj_x(on_image_saved_params)} {params} {print_obj_x(params)}")
+
+
+# filename==> output\txt2img-images\fantasticmix_k2\13898-3902715526.png
+# image==> <PIL.Image.Image image mode=RGB size=768x1024 at 0x2D7C4A3D900>
+# p==> <modules.processing.StableDiffusionProcessingTxt2Img object at 0x000002D691072F20>
+# pnginfo==> {'parameters': '1girl,nsfw,bare shoulders,, <lora:ip-adapter-faceid-plusv2_sd15_lora:1>, <lora:LCM_15:1>\nNegative prompt: low quality,badhandv4,bad-picture-chill-75v,\nSteps: 6, Sampler: Euler a, Schedule type: Automatic, CFG scale: 1.5, Seed: 3902715526, Size: 768x1024, Model hash: 19bbe9faa4, Model: fantasticmix_k2, Clip skip: 2, Lora hashes: "ip-adapter-faceid-plusv2_sd15_lora: a95a0f4bdcb9, LCM_15: aaebf6360f7d", TI hashes: "badhandv4: 5e40d722fc3d, bad-picture-chill-75v: 7d9cc5f549d7", Downcast alphas_cumprod: True, Version: v1.10.1'}
 
 
 # indication = enum.Enum('Indication', dict(keys))

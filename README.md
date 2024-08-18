@@ -86,6 +86,20 @@
 
 ## Installtion
 
+* Only send from sd-web-ui (easy 10mins)
+  * its useful enough for most case.
+  * Line Notify https://notify-bot.line.me/
+  * Telegram bot https://t.me/botfather
+* Send command to sd-web-ui from mobile (u need a cloud server for webhook)
+  * Line Bot Messaging API https://developers.line.biz/en/services/messaging-api/
+  * send simple command to control web-ui
+    * star/stop forever generate
+    * add/remove prompt
+    * ...u tell me
+  * [update] security issue; this feature paused.
+
+## Installtion  
+
 * You need get Messaging access token first. 
   * LINE Notify (basic usage, receive from web-ui)
     * You need get Token, 
@@ -125,7 +139,15 @@
      * https://ifttt.com/line
      * https://ifttt.com/explore
 
-  
+## Other sd-extension auto series!
+* sd-webui-decadetw-auto-messaging-realtime
+  * send sd-image result to your IM on mobile phone
+  * LINE, Telegram,
+  * https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime
+* sd-webui-decadetw-auto-prompt-llm
+  * render AI by AI
+  * call LLM-Text-Vision for SD-prompt
+  * https://github.com/xlinx/sd-webui-decadetw-auto-prompt-llm
 
 
 ## Colophon
