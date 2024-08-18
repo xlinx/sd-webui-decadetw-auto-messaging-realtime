@@ -249,12 +249,18 @@ class AutoMessaging(scripts.Script):
         assert type(im_telegram_msg_header) == str, "must be str"
 
         # im_telegram_msg_header = trim_string(str(im_telegram_msg_header), 1000, '...(tele img caption max len=4096)')
-        im_telegram_msg_header = im_telegram_msg_header[: 1000]+'...(tele img caption max len=4096)'
+        # log.warning(f"[1][][send_msg_telegram]im_telegram_msg_header: {im_telegram_msg_header}")
+        ori_str = im_telegram_msg_header
+        if len(ori_str) > 800:
+            log.warning(f"[][][send_msg_telegram]img caption too long >800 send append send text alternative: {im_telegram_msg_header}")
+            im_telegram_msg_header = "[send from web-ui] Image Caption Too Long; send text msg alternative"
+            # im_telegram_msg_header = im_telegram_msg_header[:800]+'...(tele img caption max len=4096)'
+
         # msg_all = bot_telegram_msg_header + str(bot_line_notify_trigger_by) + str(bot_line_notify_send_with)
         headers = {'Content-Type': 'application/json', "cache-control": "no-cache"}
         result = ''
         # API ref: https://core.telegram.org/bots/api#sendphoto
-        if opened_files.__len__() > 0:
+        if len(opened_files) > 0:
             url = f'https://api.telegram.org/bot{im_telegram_token_botid}/sendPhoto'
             data = {"chat_id": im_telegram_token_chatid, "caption": im_telegram_msg_header}
             for img in opened_files:
@@ -263,6 +269,12 @@ class AutoMessaging(scripts.Script):
                 # result = requests.post(url, headers=headers, data=json.dumps(data), files=imagefile)
                 result = requests.post(url, params=data, files=imagefile)
                 log.warning(f"[][][send_msg_telegram]w/image: {result}")
+            if len(ori_str) > 800:
+                url2 = f'https://api.telegram.org/bot{im_telegram_token_botid}/sendMessage'
+                data2 = {"chat_id": im_telegram_token_chatid, "text": ori_str}
+                log.warning(f"[][][send_msg_telegram]data: {data2}")
+                result2 = requests.post(url2, params=data2)
+                log.warning(f"[][][send_msg_telegram]w/text: {result2}")
 
         else:
             # url = f'https://api.telegram.org/bot{im_telegram_token_botid}/sendMessage?chat_id={im_telegram_token_chatid}&text={im_telegram_msg_header}'
