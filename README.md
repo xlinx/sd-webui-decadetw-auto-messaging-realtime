@@ -19,6 +19,10 @@
 </p>
 
 * Automatic1111 extension
+* Support 
+  * LINE-Notify  [update202407]
+  * Telegram-bot [update202407]
+  * Discord-bot  [update20240820]
 * Messaging by time | result | states
   * every 10|60|120 sec
   * each result image generated (finding how get image path ing...)
@@ -53,12 +57,16 @@
 <table style="border-width:0px" >
  <tr>
     <td><b style="font-size:30px">1. LINE-Notify</b></td>
-    <td><b style="font-size:30px">2. TelegramBot</b></td>
+    <td><b style="font-size:30px">2. Telegram-Bot</b></td>
+    <td><b style="font-size:30px">3. Discord-Bot</b></td>
  </tr>
 <tr>
     <td><img width="400px" src="https://scdn.line-apps.com/n/line_notice/img/pc/img_lp02_zh_TW.png?20161005"></td>
     <td><img width="200px" src="https://core.telegram.org/file/811140934/1/tbDSLHSaijc/fdcc7b6d5fb3354adf"></td>
+    <td><img width="200px" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg"></td>
  </tr>
+</table>
+<table style="border-width:0px" >
 <tr>
     <td colspan="2"><b style="font-size:30px">3. Monitor SD-web-ui on Phone (prompt, result, temperature)</b></td>
 </tr>
@@ -84,13 +92,15 @@
 ---
 
 
-## Installtion
+# Setup guide
 
-* Only send from sd-web-ui (easy 10mins)
+## Message Action type 
+* Rx-only⬇️ and Rx+TX🔃
+* Only send from sd-web-ui to mobile(easy 10mins)
   * its useful enough for most case.
   * Line Notify https://notify-bot.line.me/
   * Telegram bot https://t.me/botfather
-* Send command to sd-web-ui from mobile (u need a cloud server for webhook)
+* ~~Send command from mobile to sd-web-ui (u need a cloud server for webhook)~~
   * Line Bot Messaging API https://developers.line.biz/en/services/messaging-api/
   * send simple command to control web-ui
     * star/stop forever generate
@@ -100,8 +110,14 @@
 
 ## Installtion  
 
-* You need get Messaging access token first. 
-  * LINE Notify (basic usage, receive from web-ui)
+#### Preparing
+* Line-Notify: ❓[access-token] ~5min
+* ~~Line-Bot-Messaging-API:~~ ❓[API access-token-ID] ❓[cloud-server] ~60min
+* Telegram-bot: ❓[bot-token] ❓[chat-id] ~10min
+* Discord: ❓[User]/❓[Server|Guild]/❓[Message] ID ~15min
+
+#### LINE
+  * ⬇️LINE Notify (basic usage, receive from web-ui)
     * You need get Token, 
     * then add LINENotify to where u want recive place(can be a group or just u)
     * 1. https://notify-bot.line.me/
@@ -110,6 +126,7 @@
     * 4. limit info https://notify-bot.line.me/doc/en/
   * LINE bot messaging-api (in advance, u can send message control web-ui)
     * https://developers.line.biz/zh-hant/services/messaging-api/
+#### Telegram
   * Telegram 
     * You need get [**_`BotToken`_**] & [**_`ChatId`_**]
       1. https://t.me/botfather
@@ -120,9 +137,7 @@
       6. add ur new bot as friend: goto https://t.me/webuix_bot
       7. get [**_`ChatID`_**]: https://api.telegram.org/botXXXXXXXXXXXXXXX/getUpdates
       8. find [**_`ChatID`_**] in json file=> ex: 1967680189
-  
    * detail manual: https://core.telegram.org/bots/tutorial#getting-ready
-      
    * get BotToken
      * add botfather inside ur telgram
      * type "/newbot"
@@ -138,7 +153,28 @@
    * IFTTT (share what's funny how u interactive with web-ui)
      * https://ifttt.com/line
      * https://ifttt.com/explore
-
+#### Discord
+  * [TX & RX] ~~Send Cmd from Discord to sd-web-ui~~ security issue. 
+  * [TX-only]Send sd-web-ui to Discord. we need 
+    * [Channel-ID] 
+    * [Bot-Token] 
+    * [Invite-Bot-into-Channel]
+    
+    ##### [Channel-ID]
+    * Create a channel on ur discord
+      * In The Discord application go to Settings > Appearance > Check developer mode. 
+      * Right click channel name and copy the channel ID (Copy ID).
+    ##### [Bot-Token]
+    * goto Discord Developer Portal. https://discord.com/developers/applications
+    * Create App on discord. 
+    * Add a Bot. Check [Message Content Intent] Save Change. 
+    * View [Token]. copy it into extension.
+    ##### [Invite-Bot-into-Channel]
+    * In App page left side menu [OAuth2]->[SCOPES]->checkbox [bot]->permissions [send message] get bot URL.
+    * run url. Add bot to channel
+      * bot URL ex: https://discord.com/oauth2/authorize?client_id=xxxxxxxxxxxx&permissions=2048&integration_type=0&scope=bot
+      * then u should see bot inside channel in user list.(前往「OAuth2」， 在「SCOPES」中點選 bot，下方連接就是機器人邀請連結，就可以將機器人邀請進去你自己的群)
+  
 ## Other sd-extension auto series!
 * sd-webui-decadetw-auto-messaging-realtime
   * send sd-image result to your IM on mobile phone
