@@ -86,6 +86,12 @@
 <tr >
     <td colspan="2"><img width="100%" src="images/r333.png"></td>
  </tr>
+<tr>
+    <td colspan="2"><b style="font-size:30px">5. working preview.</b></td>
+</tr>
+<tr >
+    <td colspan="2"><img width="100%" src="images/3in1.png"></td>
+ </tr>
 </table>
 
 

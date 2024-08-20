@@ -275,11 +275,7 @@ class AutoMessaging(scripts.Script):
         # url = f"https://discordapp.com/api/channels/{im_discord_token_chatid}/messages"
         # url = f"https://discord.com/api/v9/channels/{im_discord_token_chatid}/messages"
         url = f"https://discord.com/api/v10/channels/{im_discord_token_chatid}/messages"
-        headers = {"Authorization": 'Bot ' + im_discord_token_botid,
-                   # "Content-Type": "application/json",
-                   "Content-Type": 'multipart/form-data'
-                   # "Content-Type": 'application/x-www-form-urlencoded'
-                   }
+
         # headers = {
         #     'Content-Type': 'application/json',
         #     'Accept': 'application/json'
@@ -288,7 +284,6 @@ class AutoMessaging(scripts.Script):
         result = ''
 
         if len(opened_files_path) > 0:
-
             headers = {"Authorization": 'Bot ' + im_discord_token_botid,
                        # "Content-Disposition": """form-data; name="payload_json" """,
                        # "Content-Type": "application/json",
@@ -323,6 +318,7 @@ class AutoMessaging(scripts.Script):
                 # img_seek_0 = opened_files[index].seek(0)
                 # img_seek_0_obj[filename] = image_data_base64
                 #data:image/png;base64,BASE64_ENCODED_JPEG_IMAGE_DATA
+                opened_files[index].seek(0)
                 img_seek_0_obj[filename] = opened_files[index].read()
                 # img.seek(0)
                 json_arr.append({
@@ -361,10 +357,15 @@ class AutoMessaging(scripts.Script):
             #                "Content-Type": "image/png",
             #                }
             #     result = requests.post(url, headers=headers, data=post_json, files=imagefile)
-        else:
-            payload = {"content": im_discord_msg_header, "tts": 'false'}
-            post_json = json.dumps(payload)
-            result = requests.post(url, headers=headers, data=post_json).text
+
+        headers = {"Authorization": 'Bot ' + im_discord_token_botid,
+                   "Content-Type": "application/json",
+                   # "Content-Type": 'multipart/form-data'
+                   # "Content-Type": 'application/x-www-form-urlencoded'
+                   }
+        payload = {"content": im_discord_msg_header, "tts": 'false'}
+        post_json = json.dumps(payload)
+        result = requests.post(url, headers=headers, data=post_json).text
         # result = requests.post(url, headers=headers, data=data, files=imagefile)
 
         self.discord_bot_history_array.append([datetime.datetime.now().__str__(), result, im_discord_msg_header])
