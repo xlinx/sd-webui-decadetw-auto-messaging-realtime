@@ -465,11 +465,11 @@ class AutoMessaging(scripts.Script):
             # gr.Markdown("Blocks")
             with gr.Accordion(open=False, label="Auto Messaging Realtime v20240808"):
                 with gr.Tab("Setting"):
-                    setting__im_line_notify_enabled = gr.Checkbox(label=" 0.Enable LINE-Notify", value=True,
+                    setting__im_line_notify_enabled = gr.Checkbox(label=" 0.Enable LINE-Notify", value=False,
                                                                   elem_id="state-auto-msg_setting__im_line_notify_enabled")
-                    setting__im_telegram_enabled = gr.Checkbox(label=" 0.Enable Telegram-bot", value=True,
+                    setting__im_telegram_enabled = gr.Checkbox(label=" 0.Enable Telegram-bot", value=False,
                                                                elem_id="state-auto-msg_setting__im_telegram_enabled")
-                    setting__im_discord_enabled = gr.Checkbox(label=" 0.Enable Discord-bot", value=True,
+                    setting__im_discord_enabled = gr.Checkbox(label=" 0.Enable Discord-bot", value=False,
                                                               elem_id="state-auto-msg_setting__im_discord_enabled")
 
                     setting_trigger_type = gr.CheckboxGroup(
@@ -602,11 +602,11 @@ class AutoMessaging(scripts.Script):
                         with gr.Column(scale=5):
                             im_discord_token_botid = gr.Textbox(label="1.1 [BotToken ]", lines=1,
                                                                 info="format: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
-                                                                value="MTI3NDg3MTUzODk4NTczMDA1OQ.GKPcS7.SUwUBEyCby2skYyE08WOukd7xOU9kjVTqalcY8",
+                                                                value="",
                                                                 placeholder="MTI3NDg3MTUzODk4NTczMDA1OQ.GKPcS7.SUwUBEyCby2skYyE08WOukd7xOU9kjVTqalcY8",
                                                                 elem_id="state-auto-msg_im_discord_token_botid"
                                                                 # MTI3NDg3MTUzODk4NTczMDA1OQ.G7937H.Z-CBE-YIOd4pw_4eQ9G2Bc85BeHIp29cZoUJm8
-
+                                                                # MTI3NDg3MTUzODk4NTczMDA1OQ.GKPcS7.SUwUBEyCby2skYyE08WOukd7xOU9kjVTqalcY8
                                                                 )
                         with gr.Column(scale=2):
                             im_discord_token_chatid = gr.Textbox(label="1.2[ChatID]", lines=1,

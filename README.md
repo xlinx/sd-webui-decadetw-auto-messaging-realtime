@@ -19,6 +19,10 @@
 </p>
 
 * Automatic1111 extension
+* Support 
+  * LINE-Notify  [update202407]
+  * Telegram-bot [update202407]
+  * Discord-bot  [update20240820]
 * Messaging by time | result | states
   * every 10|60|120 sec
   * each result image generated (finding how get image path ing...)
@@ -53,12 +57,16 @@
 <table style="border-width:0px" >
  <tr>
     <td><b style="font-size:30px">1. LINE-Notify</b></td>
-    <td><b style="font-size:30px">2. TelegramBot</b></td>
+    <td><b style="font-size:30px">2. Telegram-Bot</b></td>
+    <td><b style="font-size:30px">3. Discord-Bot</b></td>
  </tr>
 <tr>
     <td><img width="400px" src="https://scdn.line-apps.com/n/line_notice/img/pc/img_lp02_zh_TW.png?20161005"></td>
     <td><img width="200px" src="https://core.telegram.org/file/811140934/1/tbDSLHSaijc/fdcc7b6d5fb3354adf"></td>
+    <td><img width="200px" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg"></td>
  </tr>
+</table>
+<table style="border-width:0px" >
 <tr>
     <td colspan="2"><b style="font-size:30px">3. Monitor SD-web-ui on Phone (prompt, result, temperature)</b></td>
 </tr>
