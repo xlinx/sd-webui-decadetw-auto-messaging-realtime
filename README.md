@@ -20,18 +20,18 @@
 
 * Automatic1111 extension
 * Support 
-  * LINE-Notify  [update202407]
-  * Telegram-bot [update202407]
-  * Discord-bot  [update20240820]
-* Messaging by time | result | states
-  * every 10|60|120 sec
-  * each result image generated (finding how get image path ing...)
-  * temperature state too high (considering use py-lib or not )
+  * 🟢 LINE-Notify  [update202407]
+  * 🟢 Telegram-bot [update202407]
+  * 🟢 Discord-bot  [update20240820]
+* Messaging by 🟢time | 🟢result | 🟠states
+  * 🟢 every 10|60|120 sec
+  * 🟢 each result image generated (finding how get image path ing...)
+  * 🟠 temperature state too high (considering use py-lib or not )
 * Messaging to you or group
-  * image result, 
-  * prompt, 
-  * web-ui setting, 
-  * PC state (like: CPU, GPU temperature) (studying... )
+  * 🟢 image result, 
+  * 🟢 prompt, 
+  * 🟠 web-ui setting, 
+  * 🟠 PC state (like: CPU, GPU temperature) (studying... )
     * https://github.com/w-e-w/stable-diffusion-webui-GPU-temperature-protection
 
 
@@ -39,21 +39,21 @@
 
 * When u outdoor, receive SD-web-ui State.
   * [Receive] Image
-    * SD-image-generated
-    * ~~PC screenshot~~
+    * 🟢 SD-image-generated
+    * 🔴 ~~PC screenshot~~ (security issue, if u know what u r doing, u can enable it inside code by uself) 
       * ~~u can put the windows-build system monitor beside for screenshot capture~~
   * [Receive] Text
-    * SD-Prompt
-    * PC-State-temperature (working...)
+    * 🟢 SD-Prompt
+    * 🟠 PC-State-temperature (working...)
       * Nvidia card temperature
       * AMD card temperature
       * CPU temperature
   
-* Just look IM app to check result from web-ui
-* [Rx] Monitor ur Web-ui when u eating, GYM, working
-  * image, info-text, info-temperature
+* 🦥 Just look IM app to check result from web-ui
+* [Rx] 📲 Monitor ur Web-ui when u eating, GYM, working
+  * 🟢 image, info-text, info-temperature
 * [Tx] Control ur Web-ui when u eating, GYM, working (not yet)
-  * type message as command to stop gen-forever
+  * 🟠 type message as command to stop gen-forever
 <table style="border-width:0px" >
  <tr>
     <td><b style="font-size:30px">1. LINE-Notify</b></td>
@@ -87,10 +87,22 @@
     <td colspan="2"><img width="100%" src="images/r333.png"></td>
  </tr>
 <tr>
-    <td colspan="2"><b style="font-size:30px">5. working preview.</b></td>
+    <td colspan="2"><b style="font-size:30px">5. working preview. </b></td>
 </tr>
-<tr >
-    <td colspan="2"><img width="100%" src="images/3in1.png"></td>
+<tr>
+    <td colspan="2"><b style="font-size:20px">[🟢] stable-diffusion-webui-AUTOMATIC1111</b></td>
+</tr>
+<tr>
+    <td colspan="2"><b style="font-size:20px">[🟢] stable-diffusion-webui-forge</b></td>
+</tr>
+<tr>
+    <td colspan="2"><b style="font-size:20px">[🟠] others gradio.let me know on issue</b></td>
+</tr>
+<tr>
+    <td colspan="2">
+        <img width="100%" src="images/r3in1_2.png">
+        <img width="100%" src="images/3in1.png">
+    </td>
  </tr>
 </table>
 
