@@ -697,11 +697,12 @@ class AutoMessaging(scripts.Script):
                                         _js="function(v){localStorage.setItem('im_telegram_token_chatid',v)}",
                                         inputs=im_telegram_token_chatid)
 
-        gr_blocks.load(fn=None, outputs=[im_line_notify_token, im_telegram_token_botid, im_telegram_token_chatid],
-                       _js="function(){return ["
-                           "localStorage.getItem('im_line_notify_token'),"
-                           "localStorage.getItem('im_telegram_token_botid'),"
-                           "localStorage.getItem('im_telegram_token_chatid')]}")
+        #hot fix stable-diffusion-webui-forge
+        # gr_blocks.load(fn=None, outputs=[im_line_notify_token, im_telegram_token_botid, im_telegram_token_chatid],
+        #                _js="function(){return ["
+        #                    "localStorage.getItem('im_line_notify_token'),"
+        #                    "localStorage.getItem('im_telegram_token_botid'),"
+        #                    "localStorage.getItem('im_telegram_token_chatid')]}")
 
         # gr_blocks.load(fn=None, inputs=None, outputs=[im_telegram_token_botid], _js="function(){load_LocalStorge('auto-msg-realtime-line-notify-token', 'auto-msg-realtime-line-notify-token')}")
         # gr_blocks.load(fn=None, inputs=None, outputs=[im_telegram_token_chatid], _js="function(){load_LocalStorge('auto-msg-realtime-telegram-bot-chat-id', 'auto-msg-realtime-telegram-bot-chat-id')}")
