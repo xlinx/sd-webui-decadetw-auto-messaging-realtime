@@ -1,3 +1,12 @@
+### Quick Links
+
+* Auto prompt by LLM and LLM-Vision (Trigger more details out inside model) 
+    * sd-web-ui: https://github.com/xlinx/sd-webui-decadetw-auto-prompt-llm
+    * ComfyUI:   https://github.com/xlinx/ComfyUI-decadetw-auto-prompt-llm
+* Automatic1111 | Forge extension  (LINE | Telegram | Discord)
+  * sd-web-ui:https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime
+  * ComfyUI:  https://github.com/xlinx/ComfyUI-decadetw-auto-messaging-realtime
+<hr/>
 # sd-webui-decadetw-Auto-Messaging-realtime
 <hr/>
 <p align="center">
@@ -36,7 +45,11 @@
 
 
 ## Motivation
-
+* Mobile phone wallpaper.
+  * change mobile wallpaper ever 5sec....
+* an architect like: architect, cloth designer, art-worker.
+  * IF you are looking for idea 🍥 from image
+  * just slide ur phone IM msg
 * When u outdoor, receive SD-web-ui State.
   * [Receive] Image
     * 🟢 SD-image-generated
@@ -203,6 +216,10 @@
   * call LLM-Text-Vision for SD-prompt
   * https://github.com/xlinx/sd-webui-decadetw-auto-prompt-llm
 
+
+## Buy me a Coca cola ☕
+
+https://buymeacoffee.com/xxoooxx
 
 ## Colophon
 
