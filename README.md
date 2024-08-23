@@ -87,8 +87,8 @@
     <td colspan="2"><b style="font-size:30px">3. Monitor SD-web-ui on Phone (prompt, result, temperature)</b></td>
 </tr>
 <tr >
-    <td colspan="1"><img width="100%" src="images/r7.jpg"></td>
-    <td colspan="1"><img width="65%" src="images/r77.jpg"></td>
+    <td colspan="2"><img width="100%" src="images/readme_fastion1.png"></td>
+    
  </tr>
 <tr>
     <td colspan="2"><b style="font-size:30px">4. Auto Messaging Realtime UI</b></td>
