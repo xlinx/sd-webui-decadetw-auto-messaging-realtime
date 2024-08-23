@@ -1,15 +1,15 @@
 ### Quick Links
 
 * Auto prompt by LLM and LLM-Vision (Trigger more details out inside model) 
-    * sd-web-ui: https://github.com/xlinx/sd-webui-decadetw-auto-prompt-llm
+    * SD-WEB-UI: https://github.com/xlinx/sd-webui-decadetw-auto-prompt-llm
     * ComfyUI:   https://github.com/xlinx/ComfyUI-decadetw-auto-prompt-llm
-* Automatic1111 | Forge extension  (LINE | Telegram | Discord)
-  * sd-web-ui:https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime
+* Auto msg to ur mobile  (LINE | Telegram | Discord)
+  * SD-WEB-UI :https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime
   * ComfyUI:  https://github.com/xlinx/ComfyUI-decadetw-auto-messaging-realtime
 
 <hr/>
 
-# sd-webui-decadetw-Auto-Messaging-realtime
+# SD-WEB-UI | ComfyUI | decadetw-Auto-Messaging-realtime
 
 <hr/>
 <p align="center">
@@ -30,7 +30,7 @@
 </a>
 </p>
 
-* Automatic1111 extension
+* SD-WEB-UI | ComfyUI | extension | cust-nodes
 * Support 
   * 🟢 LINE-Notify  [update202407]
   * 🟢 Telegram-bot [update202407]
@@ -55,15 +55,13 @@
   * just slide ur phone IM msg
 * When u outdoor, receive SD-web-ui State.
   * [Receive] Image
-    * 🟢 SD-image-generated
-    * 🔴 ~~PC screenshot~~ (security issue, if u know what u r doing, u can enable it inside code by uself) 
-      * ~~u can put the windows-build system monitor beside for screenshot capture~~
+  * 🟢 SD-image-generated
+  * 🔴 ~~PC screenshot~~ (security issue, if u know what u r doing, u can enable it inside code by uself) 
+    * ~~u can put the windows-build system monitor beside for screenshot capture~~
   * [Receive] Text
-    * 🟢 SD-Prompt
-    * 🟠 PC-State-temperature (working...)
-      * Nvidia card temperature
-      * AMD card temperature
-      * CPU temperature
+  * 🟢 SD-Prompt
+  * 🟠 PC-State-temperature (working...)
+    * Nvidia| AMD | temperature
   
 * 🦥 Just look IM app to check result from web-ui
 * [Rx] 📲 Monitor ur Web-ui when u eating, GYM, working
@@ -84,18 +82,20 @@
 </table>
 <table style="border-width:0px" >
 <tr>
-    <td colspan="2"><b style="font-size:30px">3. Monitor SD-web-ui on Phone (prompt, result, temperature)</b></td>
+    <td colspan="2"><b style="font-size:30px">3. Monitor result on Mobile (prompt, image, temperature)</b></td>
 </tr>
 <tr >
-    <td colspan="2"><img width="100%" src="images/readme_fastion1.png"></td>
+    <td colspan="2"><img width="50%" src="images/readme_3IM.png"></td>
     
  </tr>
 <tr>
-    <td colspan="2"><b style="font-size:30px">4. Auto Messaging Realtime UI</b></td>
+    <td colspan="2"><b style="font-size:30px">4. Auto Msg Realtime Interface | SD-WEB-UI & ComfyUI</b></td>
  </tr>
 <tr >
-    <td colspan="2"><img width="100%" src="images/readme_auto_msg_main_ui.png"></td>
- </tr>
+    <td colspan="1"><img width="100%" src="images/readme_sdweb_main_ui.png"></td>
+    <td colspan="1"><img width="100%" src="images/readme_comfyui_main_ui.png"></td>
+
+</tr>
 <tr>
     <td colspan="2"><b style="font-size:30px">5. working preview. </b></td>
 <tr>
@@ -105,17 +105,17 @@
     <td colspan="2"><b style="font-size:16px">[🟢] stable-diffusion-webui-forge</b></td>
 </tr>
 <tr>
-    <td colspan="2"><b style="font-size:16px">[🟠] others gradio.let me know on issue</b></td>
+    <td colspan="2"><b style="font-size:16px">[🟢] ComfyUI </b></td>
 </tr>
 <tr>
     <td colspan="2"><b style="font-size:30px">6. Send Multi-Info perview.</b></td>
 </tr>
 <tr>
     <td colspan="1">
-        <img width="100%" src="images/r3in1_2.png">
+        <img width="100%" src="images/readme_3in1.png">
     </td>
     <td colspan="1">
-        <img width="100%" src="images/3in1.png">
+        <img width="100%" src="images/readme_3in1_stage.png">
     </td>
  </tr>
 </table>
