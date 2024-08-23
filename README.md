@@ -70,15 +70,15 @@
   * 🟢 image, info-text, info-temperature
 * [Tx] Control ur Web-ui when u eating, GYM, working (not yet)
   * 🟠 type message as command to stop gen-forever
-<table style="border-width:0px" >
+<table style="border-width:0px">
  <tr>
     <td><b style="font-size:30px">1. LINE-Notify</b></td>
     <td><b style="font-size:30px">2. Telegram-Bot</b></td>
     <td><b style="font-size:30px">3. Discord-Bot</b></td>
  </tr>
 <tr>
-    <td><img width="400px" src="https://scdn.line-apps.com/n/line_notice/img/pc/img_lp02_zh_TW.png?20161005"></td>
-    <td><img width="200px" src="https://core.telegram.org/file/811140934/1/tbDSLHSaijc/fdcc7b6d5fb3354adf"></td>
+    <td><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png"></td>
+    <td><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png"></td>
     <td><img width="200px" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg"></td>
  </tr>
 </table>
@@ -94,29 +94,27 @@
     <td colspan="2"><b style="font-size:30px">4. Auto Messaging Realtime UI</b></td>
  </tr>
 <tr >
-    <td colspan="2"><img width="100%" src="images/r3.png"></td>
- </tr>
-<tr >
-    <td colspan="2"><img width="100%" src="images/r33.png"></td>
- </tr>
-<tr >
-    <td colspan="2"><img width="100%" src="images/r333.png"></td>
+    <td colspan="2"><img width="100%" src="images/readme_auto_msg_main_ui.png"></td>
  </tr>
 <tr>
     <td colspan="2"><b style="font-size:30px">5. working preview. </b></td>
+<tr>
+    <td colspan="2"><b style="font-size:16px">[🟢] stable-diffusion-webui-AUTOMATIC1111</b></td>
 </tr>
 <tr>
-    <td colspan="2"><b style="font-size:20px">[🟢] stable-diffusion-webui-AUTOMATIC1111</b></td>
+    <td colspan="2"><b style="font-size:16px">[🟢] stable-diffusion-webui-forge</b></td>
 </tr>
 <tr>
-    <td colspan="2"><b style="font-size:20px">[🟢] stable-diffusion-webui-forge</b></td>
+    <td colspan="2"><b style="font-size:16px">[🟠] others gradio.let me know on issue</b></td>
 </tr>
 <tr>
-    <td colspan="2"><b style="font-size:20px">[🟠] others gradio.let me know on issue</b></td>
+    <td colspan="2"><b style="font-size:30px">6. Send Multi-Info perview.</b></td>
 </tr>
 <tr>
-    <td colspan="2">
+    <td colspan="1">
         <img width="100%" src="images/r3in1_2.png">
+    </td>
+    <td colspan="1">
         <img width="100%" src="images/3in1.png">
     </td>
  </tr>
