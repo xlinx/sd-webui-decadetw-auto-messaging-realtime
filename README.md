@@ -6,12 +6,23 @@
 * Auto msg to ur mobile  (LINE | Telegram | Discord)
   * SD-WEB-UI :https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime
   * ComfyUI:  https://github.com/xlinx/ComfyUI-decadetw-auto-messaging-realtime
+* CivitAI Info|discuss:
+  * https://civitai.com/articles/6988/extornode-using-llm-trigger-more-detail-that-u-never-thought
+  * https://civitai.com/articles/6989/extornode-sd-image-auto-msg-to-u-mobile-realtime
 
 <hr/>
 
 # SD-WEB-UI | ComfyUI | decadetw-Auto-Messaging-realtime
 
 <hr/>
+<p align="center">
+<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxlinx%2Fsd-webui-decadetw-auto-prompt-llm&count_bg=%2379C83D&title_bg=%23555555&icon=codeforces.svg&icon_color=%23E7E7E7&title=sd-webui-decadetw-auto-prompt-llm&edge_flat=true" alt=""/>
+<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxlinx%2FComfyUI-decadetw-auto-prompt-llm&count_bg=%2379C83D&title_bg=%23555555&icon=codeforces.svg&icon_color=%23E7E7E7&title=ComfyUI-decadetw-auto-prompt-llm&edge_flat=true" alt=""/>
+</p>
+<p align="center">
+<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxlinx%2Fsd-webui-decadetw-auto-messaging-realtime&count_bg=%2379C83D&title_bg=%23555555&icon=codeforces.svg&icon_color=%23E7E7E7&title=sd-webui-decadetw-auto-messaging-realtime&edge_flat=true" alt=""/>
+<img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fxlinx%2FComfyUI-decadetw-auto-messaging-realtime&count_bg=%2379C83D&title_bg=%23555555&icon=codeforces.svg&icon_color=%23E7E7E7&title=ComfyUI-decadetw-auto-messaging-realtime&edge_flat=true" alt=""/>
+</p>
 <p align="center">
   <a href="https://github.com/feross/standard">
     <img src="https://img.shields.io/badge/code%20style-standard-green.svg?style=flat-square" alt="">
@@ -206,16 +217,7 @@
     * run url. Add bot to channel
       * bot URL ex: https://discord.com/oauth2/authorize?client_id=xxxxxxxxxxxx&permissions=2048&integration_type=0&scope=bot
       * then u should see bot inside channel in user list.(前往「OAuth2」， 在「SCOPES」中點選 bot，下方連接就是機器人邀請連結，就可以將機器人邀請進去你自己的群)
-  
-## Other sd-extension auto series!
-* sd-webui-decadetw-auto-messaging-realtime
-  * send sd-image result to your IM on mobile phone
-  * LINE, Telegram,
-  * https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime
-* sd-webui-decadetw-auto-prompt-llm
-  * render AI by AI
-  * call LLM-Text-Vision for SD-prompt
-  * https://github.com/xlinx/sd-webui-decadetw-auto-prompt-llm
+
 
 
 ## Buy me a Coca cola ☕
