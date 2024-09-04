@@ -274,19 +274,25 @@ class AutoMessaging(scripts.Script):
         #     opened_files.append(image)
 
         if setting__im_line_notify_enabled:
-            result_line_notify = self.send_msg_linenotify(opened_files, im_line_notify_token, im_line_notify_msg_header)
-            log.warning(f"[][send_msg_all][result_line_notify]: {result_line_notify}")
+            arr = im_line_notify_token.split(',')
+            for e in arr:
+                result_line_notify = self.send_msg_linenotify(opened_files, e, im_line_notify_msg_header)
+                log.warning(f"[][send_msg_all][result_line_notify]: {result_line_notify}")
 
         if setting__im_telegram_enabled:
-            result_telegram_bot = self.send_msg_telegram(opened_files, im_telegram_token_botid,
-                                                         im_telegram_token_chatid,
-                                                         im_telegram_msg_header)
-            log.warning(f"[][send_msg_all][result_telegram_bot]: {result_telegram_bot}")
+            arr = im_telegram_token_chatid.split(',')
+            for e in arr:
+                result_telegram_bot = self.send_msg_telegram(opened_files, im_telegram_token_botid,
+                                                             e,
+                                                             im_telegram_msg_header)
+                log.warning(f"[][send_msg_all][result_telegram_bot]: {result_telegram_bot}")
         if setting__im_discord_enabled:
-            result_discord_bot = self.send_msg_discord(opened_files, opened_files_path, im_discord_token_botid,
-                                                       im_discord_token_chatid,
-                                                       im_discord_msg_header)
-            log.warning(f"[][send_msg_all][result_discord_bot]: {result_discord_bot}")
+            arr = im_discord_token_chatid.split(',')
+            for e in arr:
+                result_discord_bot = self.send_msg_discord(opened_files, opened_files_path, im_discord_token_botid,
+                                                           e,
+                                                           im_discord_msg_header)
+                log.warning(f"[][send_msg_all][result_discord_bot]: {result_discord_bot}")
 
         return {'setting': [self.lin_notify_history_array[0], self.telegram_bot_history_array[0],
                             self.discord_bot_history_array[0]],
