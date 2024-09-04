@@ -189,7 +189,7 @@ class AutoMessaging(scripts.Script):
                                      im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header,
                                      setup_enum_send_image_result_radio,
                                      setting__im_discord_enabled, im_discord_token_botid,
-                                     im_discord_token_chatid, im_discord_msg_header, im_discord_notify_history):
+                                     im_discord_token_chatid, im_discord_msg_header):
 
         if EnumSendContent.TextPrompt.value in setting_send_content_with:
             im_line_notify_msg_header += '\n▣prompt:' + p.prompt
@@ -208,7 +208,7 @@ class AutoMessaging(scripts.Script):
                                   im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header,
                                   setup_enum_send_image_result_radio,
                                   setting__im_discord_enabled, im_discord_token_botid,
-                                  im_discord_token_chatid, im_discord_msg_header, im_discord_notify_history)
+                                  im_discord_token_chatid, im_discord_msg_header)
 
     def button_setting(self, *args):
         return self.send_msg_all_lets_go(*args).get('setting')
@@ -229,7 +229,7 @@ class AutoMessaging(scripts.Script):
                              im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header,
                              setup_enum_send_image_result_radio,
                              setting__im_discord_enabled, im_discord_token_botid,
-                             im_discord_token_chatid, im_discord_msg_header, im_discord_notify_history):
+                             im_discord_token_chatid, im_discord_msg_header):
         opened_files = []
         opened_files_path = []
         up_3_level_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
