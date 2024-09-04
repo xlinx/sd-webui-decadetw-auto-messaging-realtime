@@ -83,6 +83,23 @@ class RepeatTimer(Timer):
             self.function(*self.args, **self.kwargs)
 
 
+def community_export_to_text( *args, **kwargs):
+    dictx = (dict(zip(args_keys, args)))
+    return json.dumps(dictx, indent=2)
+
+
+def community_import_from_text( *args, **kwargs):
+    try:
+        jo = json.loads(args[0])
+        import_data = []
+        for ele in args_keys:
+            import_data.append(jo[ele])
+        log.warning("[O][Auto-LLM][Import-OK]")
+        return import_data
+    except Exception as e:
+        log.warning("[X][Auto-LLM][Import-Fail]")
+
+
 def tel_getupdate(im_telegram_token_botid):
     url = f'https://api.telegram.org/bot{im_telegram_token_botid}/getUpdates'
     result = requests.post(url)
@@ -312,8 +329,8 @@ class AutoMessaging(scripts.Script):
             for index, img_path in enumerate(opened_files_path):
                 filename = os.path.basename(img_path)
                 # with open(img_path, "rb") as opened_image_file:
-                    # image_data_base64 = 'data:image/png;base64,' + base64.b64encode(opened_image_file.read()).decode("utf-8")
-                    # img_seek_0_obj[filename] = opened_image_file.read()
+                # image_data_base64 = 'data:image/png;base64,' + base64.b64encode(opened_image_file.read()).decode("utf-8")
+                # img_seek_0_obj[filename] = opened_image_file.read()
 
                 # img_seek_0 = opened_files[index].seek(0)
                 # img_seek_0_obj[filename] = image_data_base64
@@ -651,7 +668,35 @@ class AutoMessaging(scripts.Script):
                         "* Max 1000 request per hour(includes text image), 10MB per file. \n"
                         "* API Rate Limit plz check: https://notify-bot.line.me/doc/en/ | https://core.telegram.org/bots/api\n"
                     )
+                with gr.Tab("Export/Import"):
+                    gr.Markdown("* Share and see how people how to use LLM in SD.\n"
+                                "* Community Share Link: \n"
+                                "* https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime\n"
+                                )
+                    with gr.Row():
+                        community_export_btn = gr.Button("0. Export setting to text")
+                        community_import_btn = gr.Button("0. Import setting")
 
+                    community_text = gr.Textbox(
+                        label="1. copy/paste Setting here",
+                        lines=3,
+                        value="",
+                        placeholder="IM settings")
+        all_args = [setting__im_line_notify_enabled, setting__im_telegram_enabled,
+                    setting_trigger_type, setting_image_count, setting_time_count,
+                    setting_temperature_gpu, setting_temperature_cpu, setting_send_content_with,
+                    im_line_notify_token, im_line_notify_msg_header,
+                    im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header,
+                    setup_enum_send_image_result_radio,
+                    setting__im_discord_enabled, im_discord_token_botid,
+                    im_discord_token_chatid, im_discord_msg_header]
+
+        community_export_btn.click(community_export_to_text,
+                                   inputs=all_args,
+                                   outputs=[community_text])
+        community_import_btn.click(community_import_from_text,
+                                   inputs=community_text,
+                                   outputs=all_args)
         im_telegram_getupdates.click(tel_getupdate,
                                      inputs=[im_telegram_token_botid],
                                      outputs=[im_telegram_getupdates_result])
@@ -661,15 +706,6 @@ class AutoMessaging(scripts.Script):
         setting_temperature_cpu.change(fn=update_temperature_label,
                                        inputs=[setting_temperature_cpu]
                                        )
-
-        all_args = [setting__im_line_notify_enabled, setting__im_telegram_enabled,
-                    setting_trigger_type, setting_image_count, setting_time_count,
-                    setting_temperature_gpu, setting_temperature_cpu, setting_send_content_with,
-                    im_line_notify_token, im_line_notify_msg_header,
-                    im_telegram_token_botid, im_telegram_token_chatid, im_telegram_msg_header,
-                    setup_enum_send_image_result_radio,
-                    setting__im_discord_enabled, im_discord_token_botid,
-                    im_discord_token_chatid, im_discord_msg_header, im_discord_notify_history]
 
         setting_send_button.click(self.button_setting,
                                   inputs=all_args,
@@ -767,7 +803,7 @@ args_keys = ['setting__im_line_notify_enabled', 'setting__im_telegram_enabled',
              'im_telegram_token_botid', 'im_telegram_token_chatid', 'im_telegram_msg_header',
              'setup_enum_send_image_result_radio',
              'setting__im_discord_enabled', 'im_discord_token_botid',
-             'im_discord_token_chatid', 'im_discord_msg_header', 'im_discord_notify_history']
+             'im_discord_token_chatid', 'im_discord_msg_header']
 on_image_saved_params = []
 args_dict = None
 
