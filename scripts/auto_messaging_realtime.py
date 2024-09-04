@@ -83,14 +83,29 @@ class RepeatTimer(Timer):
             self.function(*self.args, **self.kwargs)
 
 
-def community_export_to_text( *args, **kwargs):
+def read_from_file(filename):
+    with open(filename, "r", encoding="utf8") as file:
+        return json.load(file)
+
+
+def write_to_file(filename, current_ui_settings):
+    with open(filename, "w", encoding="utf8") as file:
+        json.dump(current_ui_settings, file, indent=4, ensure_ascii=False)
+
+
+def community_export_to_text(*args, **kwargs):
     dictx = (dict(zip(args_keys, args)))
-    return json.dumps(dictx, indent=2)
+    out = json.dumps(dictx, indent=2)
+    write_to_file('Auto-MSG-settings.json', dictx)
+    return out
 
 
-def community_import_from_text( *args, **kwargs):
+def community_import_from_text(*args, **kwargs):
     try:
-        jo = json.loads(args[0])
+        if len(str(args[0])) <= 0:
+            jo = read_from_file('Auto-MSG-settings.json')
+        else:
+            jo = json.loads(args[0])
         import_data = []
         for ele in args_keys:
             import_data.append(jo[ele])
@@ -674,14 +689,14 @@ class AutoMessaging(scripts.Script):
                                 "* https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime\n"
                                 )
                     with gr.Row():
-                        community_export_btn = gr.Button("0. Export setting to text")
-                        community_import_btn = gr.Button("0. Import setting")
+                        community_export_btn = gr.Button("0. Export&Save setting to text")
+                        community_import_btn = gr.Button("0. Import|Load setting")
 
                     community_text = gr.Textbox(
                         label="1. copy/paste Setting here",
                         lines=3,
                         value="",
-                        placeholder="IM settings")
+                        placeholder="Export&Save first; if here empty will load from disk")
         all_args = [setting__im_line_notify_enabled, setting__im_telegram_enabled,
                     setting_trigger_type, setting_image_count, setting_time_count,
                     setting_temperature_gpu, setting_temperature_cpu, setting_send_content_with,
