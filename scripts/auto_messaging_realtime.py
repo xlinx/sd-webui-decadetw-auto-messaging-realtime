@@ -502,9 +502,11 @@ class AutoMessaging(scripts.Script):
     def ui(self, is_img2img):
         with gr.Blocks() as gr_blocks:
             # gr.Markdown("Blocks")
-            with gr.Accordion(open=False, label="Auto Messaging Realtime v20240808"):
+            with gr.Accordion(open=False, label="Auto Messaging Realtime v20250202"):
                 with gr.Tab("Setting"):
-                    setting__im_line_notify_enabled = gr.Checkbox(label=" 0.Enable LINE-Notify", value=False,
+                    setting__im_line_notify_enabled = gr.Checkbox(label=" 0.Enable LINE-Notify (official stop service 2025/04)", value=False,
+                                                                  elem_id="state-auto-msg_setting__im_line_notify_enabled")
+                    setting__im_line_bot_enabled = gr.Checkbox(label=" 0.Enable LINE-Bot-Message-API", value=False,
                                                                   elem_id="state-auto-msg_setting__im_line_notify_enabled")
                     setting__im_telegram_enabled = gr.Checkbox(label=" 0.Enable Telegram-bot", value=False,
                                                                elem_id="state-auto-msg_setting__im_telegram_enabled")
@@ -594,6 +596,35 @@ class AutoMessaging(scripts.Script):
                         col_count=(3, "fixed"),
                     )
                     im_line_notify_send_button = gr.Button("Test Send (LINE)")
+                with gr.Tab("LINE-Bot"):
+                    gr.Markdown("* LINE-Bot need [Channel_access_token and (userId or groupId)]\n"
+                                "* add Notify as friend or add that to group, which don`t need chatID")
+
+                    im_line_bot_token = gr.Textbox(label="1.[Channel_access_token]", lines=1,
+                                                      value="",
+                                                      placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                                      #tcnDSnAR6Gl6pTMBfQ4wOxqtq0eSyXqqJ9Q1Hck4dRO
+                                                      )
+
+                    im_line_bot_userId = gr.Textbox(label="1.1[user_Id or group_Id]", lines=1,
+                                                   value="",
+                                                   placeholder="C4710e536d71bd32489cfe9e3a6716550",
+                                                   )
+
+                    im_line_bot_msg_header = gr.Textbox(label="2. [msg header]", lines=1,
+                                                           value="[From web-ui-line-notify]",
+                                                           placeholder="[From web-ui-line-notify]",
+                                                           )
+                    im_line_bot_history = gr.Dataframe(
+                        interactive=True,
+                        wrap=True,
+                        label="3. History",
+                        headers=["TimeStamp", "Response", "Msg"],
+                        datatype=["str", "str", "str"],
+                        row_count=3,
+                        col_count=(3, "fixed"),
+                    )
+                    im_line_bot_send_button = gr.Button("Test Send (LINE-bot)")
                 with gr.Tab("Telegram-bot"):
                     gr.Markdown("* Telegram-bot need [BotToken] and [ChatID ] \n"
                                 "* how to get, check: https://github.com/xlinx/sd-webui-decadetw-auto-messaging-realtime")
