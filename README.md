@@ -85,12 +85,16 @@
   * 🟠 type message as command to stop gen-forever
 <table style="border-width:0px">
  <tr>
-    <td><b style="font-size:30px">1. LINE-Notify</b></td>
-    <td><b style="font-size:30px">2. Telegram-Bot</b></td>
-    <td><b style="font-size:30px">3. Discord-Bot</b></td>
+    <td><b style="font-size:20px">1. LINE-Notify(official stop service @2025/04)</b></td>
+    <td><b style="font-size:20px">2. LINE-Bot-MsgAPI</b></td>
+    <td><b style="font-size:20px">3. Telegram-Bot</b></td>
+    <td><b style="font-size:20px">4. Discord-Bot</b></td>
+
+
  </tr>
 <tr>
     <td><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png"></td>
+    <td><img width="100px" src="https://developers.line.biz/assets/img/products/messaging-api/p1.svg"></td>
     <td><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png"></td>
     <td><img width="200px" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg"></td>
  </tr>
