@@ -109,7 +109,7 @@
         <li>Upload limits</li>
         <li>There is an upload limit of 50 images per hour. </li>
         <li>There is no upload limit per account, so upload to your heart's desire!</li> </td>
-    <td><img width="100px" src="https://help.imgur.com/hc/theming_assets/01HZPJA7FW0F3FNJV7M8GZ0FB0"></td>
+    <td><img width="100px" src="https://s.imgur.com/images/imgur-logo.svg"></td>
  </tr>
 </table>
 
