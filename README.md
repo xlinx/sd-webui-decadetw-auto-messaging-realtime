@@ -86,7 +86,9 @@
 
 <table style="border-width:0px">
  <tr>
-    <td><strike style="font-size:20px">1. LINE-Notify(official stop service @2025/04)</strike></td>
+    <td><strike style="font-size:20px">1. LINE-Notify(official stop service @2025/04)</strike>
+    <li>LY crop. official stop service @2025/04</li>
+    <li>using 2.LINE-Bot-Messaging API replace Notify services</li></td>
     <td><b style="font-size:20px"><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png"></td>
  </tr>
  <tr>
