@@ -83,22 +83,36 @@
   * 🟢 image, info-text, info-temperature
 * [Tx] Control ur Web-ui when u eating, GYM, working (not yet)
   * 🟠 type message as command to stop gen-forever
+
 <table style="border-width:0px">
  <tr>
-    <td><b style="font-size:20px">1. LINE-Notify(official stop service @2025/04)</b></td>
-    <td><b style="font-size:20px">2. LINE-Bot-MsgAPI</b></td>
-    <td><b style="font-size:20px">3. Telegram-Bot</b></td>
-    <td><b style="font-size:20px">4. Discord-Bot</b></td>
-
-
+    <td><strike style="font-size:20px">1. LINE-Notify(official stop service @2025/04)</strike></td>
+    <td><b style="font-size:20px"><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png"></td>
  </tr>
-<tr>
-    <td><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/LINE_logo.svg/320px-LINE_logo.svg.png"></td>
+ <tr>
+    <td><b style="font-size:20px">2. LINE-Bot-MsgAPI</b>
+    <li><a href="https://developers.line.biz/zh-hant/services/messaging-api/">link</a></li></td>
     <td><img width="100px" src="https://developers.line.biz/assets/img/products/messaging-api/p1.svg"></td>
+ </tr>
+
+ <tr>
+    <td><b style="font-size:20px">3. Telegram - Bot</b><li><a href="https://core.telegram.org/api">link</a></li></td>
     <td><img width="100px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Telegram_logo.svg/512px-Telegram_logo.svg.png"></td>
-    <td><img width="200px" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg"></td>
+ </tr>
+ <tr>
+    <td><b style="font-size:20px">4. Discord - Bot</b><li><a href="https://discord.com/developers/applications">link</a></li></td>
+    <td><img width="100px" src="https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/636e0b5061df29d55a92d945_full_logo_blurple_RGB.svg"></td>
+ </tr>
+ <tr>
+    <td><b style="font-size:20px">5. imgur - FreePic</b> 
+        <li><a href="https://imgur.com/account/settings/apps">link</a></li>
+        <li>Upload limits</li>
+        <li>There is an upload limit of 50 images per hour. </li>
+        <li>There is no upload limit per account, so upload to your heart's desire!</li> </td>
+    <td><img width="100px" src="https://help.imgur.com/hc/theming_assets/01HZPJA7FW0F3FNJV7M8GZ0FB0"></td>
  </tr>
 </table>
+
 <table style="border-width:0px" >
 <tr>
     <td colspan="2"><b style="font-size:30px">3. Monitor result on Mobile (prompt, image, temperature)</b></td>

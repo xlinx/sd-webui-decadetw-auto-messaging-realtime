@@ -703,6 +703,54 @@ class AutoMessaging(scripts.Script):
                         col_count=(3, "fixed"),
                     )
                     im_discord_send_button = gr.Button("Test Send (discord)")
+                with gr.Tab("imgur-Free"):
+                    gr.Markdown("* register account https://imgur.com/ \n"
+                                "* add a api in imgur check: https://api.imgur.com/oauth2/addclient")
+                    with gr.Row():
+                        im_imgur_clientid = gr.Textbox(label="1.1 [Client ID]", lines=1,
+                                                             info="format: xxxx:yyyyyyyy",
+                                                             value="",
+                                                             placeholder="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                                             elem_id="state-auto-msg_im_telegram_token_botid"
+                                                             #7376923093:AAGtCtd9Ogiq9yT1IBsbRD6ENQ5DbAqL6Ig
+
+                                                             )
+                        im_imgur_clientsecret = gr.Textbox(label="1.2 [Client Secret] ", lines=1,
+                                                              info="format:1234567890. can be send to personal or group",
+                                                              value="",
+                                                              placeholder="XXXXXXXXXX",  # 1967680189
+                                                              elem_id="state-auto-msg_im_telegram_token_chatid"
+                                                              )
+
+                    with gr.Row():
+                        im_imgur_accesstoken = gr.Textbox(label="2.1 [Access Token] ", lines=1,
+                                                              info="format:1234567890. can be send to personal or group",
+                                                              value="",
+                                                              placeholder="XXXXXXXXXX",  #1967680189
+                                                              elem_id="state-auto-msg_im_telegram_token_chatid"
+                                                              )
+                        im_imgur_refreshtoken = gr.Textbox(label="2.2 [Refresh Token] ", lines=1,
+                                                              info="format:1234567890. can be send to personal or group",
+                                                              value="",
+                                                              placeholder="XXXXXXXXXX",  # 1967680189
+                                                              elem_id="state-auto-msg_im_telegram_token_chatid"
+                                                              )
+                    im_imgur_msg_header = gr.Textbox(label="2.2 [msg header]", lines=1,
+                                                            info="append on every message. like prompt or temperature.",
+                                                            value="[From web-ui-telegram-bot]",
+                                                            placeholder="[From web-ui-telegram-bot]",
+                                                            elem_id="state-auto-msg_im_telegram_msg_header"
+                                                            )
+                    im_imgur_notify_history = gr.Dataframe(
+                        interactive=True,
+                        wrap=True,
+                        label="3. History",
+                        headers=["TimeStamp", "Response", "Msg"],
+                        datatype=["str", "str", "str"],
+                        row_count=3,
+                        col_count=(3, "fixed"),
+                    )
+                    im_imgur_send_button = gr.Button("Test Send (Telegram)")
                 with gr.Tab("Manual"):
                     gr.Markdown(
                         "### Other IM app \n"
