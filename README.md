@@ -253,3 +253,26 @@ https://buymeacoffee.com/xxoooxx
 Made for fun. I hope if brings you great joy, and perfect hair forever. Contact me with questions and comments, but not threats, please. And feel free to contribute! Pull requests and ideas in Discussions or Issues will be taken quite seriously!
 --- https://decade.tw
 
+## by ur self - using cUrl to IM App
+#### lineBot. (You need upload image as url first. like imgur..)
+
+```
+curl -v -X POST https://api.line.me/v2/bot/message/push -H 'Content-Type: application/json' -H 'Authorization: Bearer {__ChannelAccessToken__}' \
+-d '{
+    "to": "{__User ID | Group ID | Room ID__}",
+    "messages":[ { "type":"text", "text":"from cURL" } ],
+    "notificationDisabled": false
+}'
+```
+#### discord. (direct send from file)
+```
+
+curl -k -`F "file1=@/Users/xlinx.jpg" -H "Authorization: Bot __discord_bot_token__" https://discordapp.com/api/channels/__discord_channel_id__/messages
+
+```
+#### telgram. (direct send from file)
+```
+get chatId first - https://api.telegram.org/bot<YourBOTToken>/getUpdates
+
+CURL https://api.telegram.org/<token>/sendphoto -F chat_id=11112222333 -F photo=@c:/xlinx.jpg
+```
